@@ -1,0 +1,102 @@
+
+
+
+
+
+/* =======================================
+   BANNER SLIDER
+======================================= */
+.swiper-slide{
+    margin-top: 5px;
+}
+.section_slider img {
+    width: 100%;
+    height: 100%;
+    max-height: 550px;
+    object-fit: cover;
+    
+}
+
+.section_slider {
+    
+    overflow: hidden;
+
+}
+
+/* Mobile banner */
+@media screen and (max-width: 768px) {
+    .section_slider img {
+        max-height: 200px;
+    }
+}
+
+/* =======================================
+   SERVICE CARDS (4 cái)
+======================================= */
+
+.section_services {
+    margin: 25px 0;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* CARD BOX */
+.row .card {
+    flex: 1 1 calc(25% - 15px);
+    min-width: 160px;
+
+    background: #fff;
+    padding: 10px;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    transition: 0.2s ease;
+    
+}
+
+.row .card:hover {
+    transform: translateY(-3px);
+}
+
+/* CONTENT INSIDE CARD */
+.row .card .promo-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+}
+
+/* Icon */
+.row .card img {
+    width: 48px;
+    height: 48px;
+}
+
+/* Mobile responsive */
+@media screen and (max-width: 768px) {
+    .row .card {
+        flex: 1 1 calc(50% - 15px);
+        min-height: 90px;
+    }
+
+    .row .card .promo-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 6px;
+        font-size: 10px;
+        
+    }
+    .row .card img {
+        width: 43px;
+        height: 43px;
+    }
+}
+

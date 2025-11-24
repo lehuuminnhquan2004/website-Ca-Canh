@@ -1,0 +1,87 @@
+
+.filter-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a {
+    padding: 6px 12px;
+    background: #eee;
+    margin: 0 4px;
+    text-decoration: none;
+    border-radius: 5px;
+    color: #333;
+    display: inline-block;
+}
+
+.pagination a:hover {
+    background: #ddd;
+}
+
+.pagination .active {
+    background: #00a1ff;
+    color: #fff;
+}
+.btn.small { padding: 4px 8px; font-size: 13px; }
+.btn.danger { background: #ff4d4d; }
+.btn.danger:hover { background: #d63838; }
+
+/* --- Khung chứa filter --- */
+.filter-box {
+    width: 100%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+/* --- Hàng filter (flex) --- */
+.filter-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* --- Item trong filter --- */
+.filter-item select,
+.filter-item input {
+    padding: 8px 12px;
+    min-width: 180px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: white;
+    outline: none;
+}
+
+/* --- Nút Lọc --- */
+.btn-filter {
+    padding: 8px 18px;
+    background: #0099ff;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.btn-filter:hover {
+    background: #0077cc;
+}
+
+/* --- Responsive cho mobile --- */
+@media (max-width: 600px) {
+    
+    .form-loc {
+        grid-template-columns: repeat(2, 1fr); /* 2 cột → 2 hàng */
+    }
+}
+
+
+
+

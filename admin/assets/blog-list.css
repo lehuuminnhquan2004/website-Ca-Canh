@@ -1,0 +1,125 @@
+
+
+/* TABLE CƠ BẢN (desktop) */
+.table-wrapper {
+    width: 100%;
+
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+.table td[data-label="Hành động"] a:first-child {
+    background: #e3f2fd;
+    color: #0d47a1;
+}
+
+.table td[data-label="Hành động"] a:last-child {
+    background: #ffebee;
+    color: #b71c1c;
+}
+.table th,
+.table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    font-size: 14px;
+}
+
+.table th {
+    background: #f5f5f5;
+    font-weight: 400;
+}
+
+.table img {
+    border-radius: 6px;
+}
+
+/* RESPONSIVE MOBILE */
+@media (max-width: 768px) {
+    
+    .table tbody {
+        display: block;
+        width: 100%;
+    }
+    .table {
+        border: 0;
+        width: 300px;
+    }
+
+    .table thead {
+        display: none;
+    }
+
+    .table tr {
+        display: block;
+        margin-bottom: 14px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .table td {
+        display: flex;
+        padding: 6px 10px;
+        border: 0;
+        font-size: 14px;
+        width: 100%;
+        word-break: break-word;   /* hoặc break-all nếu slug quá dính */
+    }
+
+    .table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        flex: 0 0 30%;
+        color: #555;
+    }
+
+    .table td:last-child {
+        border-bottom: 0;
+    }
+
+    /* Ảnh đẹp hơn trên mobile */
+    .table td[data-label="Ảnh"] {
+        display: block;
+        text-align: left;
+        padding: 8px 10px 4px;
+    }
+
+    .table td[data-label="Ảnh"]::before {
+        content: "";
+    }
+
+    .table td[data-label="Ảnh"] img {
+        max-width: 150px;
+        height: auto;
+    }
+
+    /* Hành động */
+    .table td[data-label="Hành động"] {
+        justify-content: flex-start;
+        gap: 8px;
+    }
+
+    .table td[data-label="Hành động"] a {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 13px;
+    }
+
+    .table td[data-label="Hành động"] a:first-child {
+        background: #e3f2fd;
+        color: #0d47a1;
+    }
+
+    .table td[data-label="Hành động"] a:last-child {
+        background: #ffebee;
+        color: #b71c1c;
+    }
+}

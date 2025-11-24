@@ -1,0 +1,468 @@
+<?php
+session_start();
+if (empty($_SESSION['admin_id'])) {
+    header("Location: /admin/login.php");
+    exit;
+}
+
+// CSRF token
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+include __DIR__ . '/../includes/db.php';
+
+// Lấy danh mục
+$catRes = mysqli_query($conn, "SELECT * FROM categories ORDER BY name ASC");
+if (!$catRes) {
+    die("Không tải được danh mục: " . htmlspecialchars(mysqli_error($conn)));
+}
+$categories = [];
+while ($row = mysqli_fetch_assoc($catRes)) {
+    $categories[] = $row;
+}
+
+// Kiểm tra edit
+$product = null;
+$isEdit = false;
+if (isset($_GET['id'])) {
+    $id = (int)$_GET['id'];
+    $res = mysqli_query($conn, "SELECT * FROM products WHERE id=$id");
+    if (!$res) {
+        die("Không tải được sản phẩm: " . htmlspecialchars(mysqli_error($conn)));
+    }
+    $product = mysqli_fetch_assoc($res);
+    if ($product) {
+        $isEdit = true;
+    } else {
+        die("Sản phẩm không tồn tại");
+    }
+}
+
+// Giữ lại query khi quay về list
+$returnQuery = isset($_REQUEST['return']) ? $_REQUEST['return'] : '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    if (empty($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        die("CSRF token không hợp lệ.");
+    }
+
+    $name        = mysqli_real_escape_string($conn, $_POST['name']);
+    $slug        = mysqli_real_escape_string($conn, $_POST['slug']);
+    $price       = (int)$_POST['price'];
+    $desc        = mysqli_real_escape_string($conn, $_POST['description']);
+    $category_id = (int)$_POST['category_id'];
+
+    // Ảnh cũ
+    $thumbnail = $product['thumbnail'] ?? '';
+
+    // Upload ảnh mới
+    if (!empty($_FILES['thumbnail']['name'])) {
+        $targetDir = __DIR__ . '/../images/uploads/';
+        if (!file_exists($targetDir)) mkdir($targetDir, 0777, true);
+
+        $ext = strtolower(pathinfo($_FILES['thumbnail']['name'], PATHINFO_EXTENSION));
+        $allowedExt = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        if (!in_array($ext, $allowedExt)) {
+            die("Định dạng ảnh không hợp lệ!");
+        }
+
+        // Giới hạn dung lượng (2MB)
+        $maxSize = 2 * 1024 * 1024;
+        if ($_FILES['thumbnail']['size'] > $maxSize) {
+            die("Ảnh vượt quá dung lượng cho phép (tối đa 2MB).");
+        }
+
+        // Kiểm tra MIME thực tế
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->file($_FILES['thumbnail']['tmp_name']);
+        $allowedMime = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!in_array($mime, $allowedMime)) {
+            die("Nội dung file không phải ảnh hợp lệ.");
+        }
+
+        $fileName = time() . '_' . uniqid() . '.' . $ext;
+        $targetFile = $targetDir . $fileName;
+
+        if (move_uploaded_file($_FILES['thumbnail']['tmp_name'], $targetFile)) {
+            if ($isEdit && !empty($product['thumbnail'])) {
+                $oldPath = __DIR__ . '/../' . ltrim($product['thumbnail'], '/');
+                if (file_exists($oldPath)) unlink($oldPath);
+            }
+            $thumbnail = './images/uploads/' . $fileName;
+        }
+    }
+
+    // SQL
+    if ($isEdit) {
+        $sql = "UPDATE products SET 
+                    name='$name',
+                    slug='$slug',
+                    price=$price,
+                    thumbnail='$thumbnail',
+                    description='$desc',
+                    category_id=$category_id
+                WHERE id=" . (int)$product['id'];
+    } else {
+        $sql = "INSERT INTO products
+                    (name, slug, price, thumbnail, description, category_id)
+                VALUES
+                    ('$name','$slug',$price,'$thumbnail','$desc',$category_id)";
+    }
+
+    $ok = mysqli_query($conn, $sql);
+    if (!$ok) {
+        die("Lưu sản phẩm thất bại: " . htmlspecialchars(mysqli_error($conn)));
+    }
+    $redirectUrl = './products.php';
+    if (!empty($returnQuery)) {
+        $redirectUrl .= '?' . $returnQuery;
+    }
+    header("Location: " . $redirectUrl);
+    exit;
+}
+?>
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title><?= $isEdit ? "Sửa sản phẩm" : "Thêm sản phẩm" ?></title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+img.preview { margin-top:8px; max-width:150px; border:1px solid #ccc; border-radius:4px; }
+#cameraContainer { display:none; margin-top:8px; }
+video { max-width:300px; border:1px solid #ccc; border-radius:4px; }
+button, input, select, textarea { font-size:16px; }
+
+/* KHUNG KÉO THẢ */
+.drop-zone {
+    border: 2px dashed #999;
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: 8px;
+    background: #fafafa;
+}
+.drop-zone.dragover {
+    border-color: #007bff;
+    background: #f0f8ff;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1><?= $isEdit ? "Sửa sản phẩm" : "Thêm sản phẩm mới" ?></h1>
+
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+    <?php if (!empty($returnQuery)): ?>
+      <input type="hidden" name="return" value="<?= htmlspecialchars($returnQuery) ?>">
+    <?php endif; ?>
+
+    <label>Tên sản phẩm</label>
+    <input type="text" id="name" name="name" required value="<?= htmlspecialchars($product['name'] ?? '') ?>">
+
+    <label>Slug</label>
+    <input type="text" id="slug" name="slug" required value="<?= htmlspecialchars($product['slug'] ?? '') ?>">
+
+    <label>Danh mục</label>
+    <select name="category_id" required>
+        <option value="">-- Chọn danh mục --</option>
+        <?php foreach ($categories as $cat): ?>
+        <option value="<?= $cat['id'] ?>" <?= (($product['category_id'] ?? '') == $cat['id']) ? 'selected' : '' ?>>
+            <?= htmlspecialchars($cat['name']) ?>
+        </option>
+        <?php endforeach; ?>
+    </select>
+
+    <label>Giá (VNĐ)</label>
+    <input type="number" name="price" value="<?= htmlspecialchars($product['price'] ?? '') ?>">
+
+    <label>Ảnh sản phẩm</label>
+
+    <!-- KHUNG KÉO THẢ + CLICK ĐỂ CHỌN -->
+    <div id="dropZone" class="drop-zone" onclick="chooseFile()">
+        Kéo &amp; thả ảnh vào đây hoặc bấm để chọn
+    </div>
+
+    <div>
+        <button type="button" onclick="chooseFile()">Tải ảnh từ máy / Camera</button>
+    </div>
+
+    <input type="file" id="fileInput" name="thumbnail"
+           accept="image/*"
+           style="display:none">
+
+    <div id="cameraContainer">
+        <video id="video" autoplay></video><br>
+        <button type="button" onclick="takePhoto()">Chụp</button>
+    </div>
+
+    <canvas id="canvas" style="display:none"></canvas>
+
+    <img id="preview" class="preview"
+         src="<?= !empty($product['thumbnail']) ? ".".htmlspecialchars($product['thumbnail']) : '' ?>"
+         style="<?= !empty($product['thumbnail']) ? '' : 'display:none' ?>"
+    >
+
+    <label>Mô tả chi tiết</label>
+    <textarea name="description" rows="6"><?= htmlspecialchars($product['description'] ?? '') ?></textarea>
+
+    <button type="submit"><?= $isEdit ? "Cập nhật" : "Lưu" ?></button>
+    <?php if (!empty($returnQuery)): ?>
+      <a class="btn" href="./products.php?<?= htmlspecialchars($returnQuery) ?>">Quay lại</a>
+    <?php else: ?>
+      <a class="btn" href="./products.php">Quay lại</a>
+    <?php endif; ?>
+
+</form>
+</div>
+
+<script>
+// ===== TẠO SLUG TỰ ĐỘNG =====
+document.getElementById('name').addEventListener('input', function() {
+    document.getElementById('slug').value = createSlug(this.value);
+});
+function createSlug(str){
+    str = str.toLowerCase();
+    // Chuyển tiếng Việt sang không dấu
+    const from = 'áàảãạăắằẳẵặâấầẩẫậđéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵ';
+    const to   = 'aaaaaaaaaaaaaaaaadeeeeeeeeeeeiiiiiiooooooooooooooooouuuuuuuuuuuuyyyyy';
+    for (let i = 0; i < from.length; i++) {
+        str = str.replace(new RegExp(from[i], 'g'), to[i]);
+    }
+    str = str.replace(/[^a-z0-9\s-]/g,'');
+    str = str.replace(/\s+/g,'-').replace(/-+/g,'-');
+    return str.replace(/^-+|-+$/g,'');
+}
+
+// ===== UPLOAD ẢNH: CLICK CHỌN FILE =====
+function chooseFile(){
+    document.getElementById('fileInput').click();
+}
+
+// Khi chọn file từ máy / điện thoại
+document.getElementById('fileInput').addEventListener('change', function(e){
+    const file = e.target.files[0];
+    if (file) {
+        handleImageFile(file); // resize + preview
+    }
+});
+
+// ===== KÉO – THẢ ẢNH =====
+const dropZone = document.getElementById('dropZone');
+
+['dragenter','dragover'].forEach(eventName => {
+    dropZone.addEventListener(eventName, function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.add('dragover');
+    });
+});
+
+['dragleave','drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.remove('dragover');
+    });
+});
+
+// Xử lý file khi thả vào
+dropZone.addEventListener('drop', function(e){
+    const files = e.dataTransfer.files;
+    if (files && files[0]) {
+        handleImageFile(files[0]); // resize + preview
+    }
+});
+
+// ===== HÀM CHUNG: RESIZE + NÉN + GÁN VÀO FILE INPUT =====
+function handleImageFile(file){
+    if (!file.type.startsWith('image/')) {
+        alert('Vui lòng chọn file hình ảnh!');
+        return;
+    }
+
+    const preview = document.getElementById('preview');
+    const fileInput = document.getElementById('fileInput');
+    const maxBytes = 1024 * 1024; // 1024KB
+    const keepOriginalThreshold = maxBytes;
+
+    // Nếu dung lượng <= 1MB, giữ nguyên file gốc
+    if (file.size <= keepOriginalThreshold) {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        fileInput.files = dt.files;
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = 'block';
+        stopCamera();
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(ev){
+        const img = new Image();
+        img.onload = function(){
+            // Giới hạn kích thước (ví dụ max 1024px)
+            const maxWidth = 1024;
+            const maxHeight = 1024;
+
+            let width = img.width;
+            let height = img.height;
+
+            if (width > maxWidth || height > maxHeight) {
+                const ratio = Math.min(maxWidth / width, maxHeight / height);
+                width = Math.round(width * ratio);
+                height = Math.round(height * ratio);
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // Hàm nén với chất lượng giảm dần tới khi <= 1MB hoặc hết ngưỡng
+            const compressAndAssign = (quality) => {
+                canvas.toBlob(function(blob){
+                    if (!blob) {
+                        alert('Không thể xử lý ảnh!');
+                        return;
+                    }
+
+                    // Nếu vẫn >1MB và còn có thể giảm chất lượng
+                    if (blob.size > maxBytes && quality > 0.4) {
+                        return compressAndAssign(quality - 0.1);
+                    }
+
+                    const finalFile = new File(
+                        [blob],
+                        'image_' + Date.now() + '.jpg',
+                        { type: 'image/jpeg' }
+                    );
+
+                    const dt = new DataTransfer();
+                    dt.items.add(finalFile);
+                    fileInput.files = dt.files;
+
+                    preview.src = URL.createObjectURL(blob);
+                    preview.style.display = 'block';
+                    stopCamera();
+                }, 'image/jpeg', quality);
+            };
+
+            compressAndAssign(0.9);
+        };
+        img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+// ===== CAMERA (nếu bạn muốn dùng getUserMedia) =====
+let stream = null;
+
+// Nếu sau này muốn bật camera riêng thì chỉ cần gọi startCamera()
+async function startCamera(){
+    const cameraContainer = document.getElementById('cameraContainer');
+    const video = document.getElementById('video');
+
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        video.srcObject = stream;
+        cameraContainer.style.display = 'block';
+    } catch (err) {
+        console.error(err);
+        alert('Không truy cập được camera');
+    }
+}
+
+function takePhoto(){
+    const video = document.getElementById('video');
+    const preview = document.getElementById('preview');
+
+    const capCanvas = document.getElementById('canvas');
+    const ctxCap = capCanvas.getContext('2d');
+
+    // Chụp nguyên gốc
+    capCanvas.width = video.videoWidth;
+    capCanvas.height = video.videoHeight;
+    ctxCap.drawImage(video, 0, 0);
+
+    // Bước resize + nén
+    const maxWidth = 1024;
+    const maxHeight = 1024;
+
+    let width = capCanvas.width;
+    let height = capCanvas.height;
+
+    if (width > maxWidth || height > maxHeight) {
+        const ratio = Math.min(maxWidth / width, maxHeight / height);
+        width = Math.round(width * ratio);
+        height = Math.round(height * ratio);
+    }
+
+    const resizeCanvas = document.createElement('canvas');
+    resizeCanvas.width = width;
+    resizeCanvas.height = height;
+    const ctxResize = resizeCanvas.getContext('2d');
+    ctxResize.drawImage(capCanvas, 0, 0, width, height);
+
+    resizeCanvas.toBlob(function(blob){
+        if (!blob) {
+            alert('Không thể xử lý ảnh từ camera!');
+            return;
+        }
+
+        const maxBytes = 1024 * 1024;
+        const assignFile = (finalBlob) => {
+            preview.src = URL.createObjectURL(finalBlob);
+            preview.style.display = 'block';
+            document.getElementById('cameraContainer').style.display = 'none';
+            stopCamera();
+
+            const compressedFile = new File(
+                [finalBlob],
+                'camera_' + Date.now() + '.jpg',
+                { type: 'image/jpeg' }
+            );
+            const dt = new DataTransfer();
+            dt.items.add(compressedFile);
+            document.getElementById('fileInput').files = dt.files;
+        };
+
+        if (blob.size <= maxBytes) {
+            assignFile(blob);
+            return;
+        }
+
+        const compressAgain = (quality) => {
+            resizeCanvas.toBlob(function(b2){
+                if (!b2) {
+                    alert('Không thể xử lý ảnh từ camera!');
+                    return;
+                }
+                if (b2.size > maxBytes && quality > 0.4) {
+                    return compressAgain(quality - 0.1);
+                }
+                assignFile(b2);
+            }, 'image/jpeg', quality);
+        };
+
+        compressAgain(0.9);
+    }, 'image/jpeg', 0.9);
+}
+
+function stopCamera(){
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+    }
+}
+</script>
+
+</body>
+</html>

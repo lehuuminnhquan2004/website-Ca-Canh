@@ -1,0 +1,209 @@
+
+.site-header {
+    background: linear-gradient(135deg, #0fb1f7 0%, #0066ff 100%);
+    color: #fff;
+    
+  
+}
+  
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    gap: 12px;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .logo img { width: 40px; height: auto; }
+  .logo a { font-size: 20px; font-weight: bold; color: #fff; }
+  
+.main-nav {
+    z-index: 10;
+    display: flex;
+    gap: 15px;
+    background: linear-gradient(135deg, #0fb1f7 0%, #0066ff 100%);
+}
+
+.main-nav a,
+.main-nav .dropdown-toggle {
+    color: #fff;
+    font-size: 15px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    min-width: 100px;
+    text-align: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.main-nav a:hover,
+.main-nav .dropdown-toggle:hover { background: rgba(255,255,255,0.15); }
+
+.dropdown-toggle .arrow {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(315deg);        /* mũi tên sang phải */
+  transition: transform 0.2s ease; /* hiệu ứng xoay */
+}
+.dropdown-toggle.open .arrow {
+  transform: rotate(45deg);       /* xoay xuống khi mở */
+}
+
+.nav-dropdown {
+  position: relative;
+  display: flex;
+}
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: -36px;
+  background: #ffffff;
+  color: #0b4a7d;
+  border-radius: 6px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.16);
+  min-width: 180px;
+  padding: 6px 0;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 20;
+}
+.dropdown-menu a {
+  color: #0b4a7d;
+  text-align: left;
+  padding: 10px 14px;
+  border-radius: 0;
+  min-width: unset;
+}
+.dropdown-menu a:hover {
+  background: #9effff;
+}
+.dropdown-menu.show {
+  display: flex;
+ 
+}
+  
+  .nav-toggle {
+    display: none;
+    width: 36px;
+    height: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    padding: 4px;
+    touch-action: manipulation;
+  }
+
+  .nav-toggle span {
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    height: 3px;
+    background: #fff;
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.2s ease, top 0.25s ease;
+  }
+
+  .nav-toggle span:nth-child(1) { top: 6px; }
+  .nav-toggle span:nth-child(2) { top: 13px; }
+  .nav-toggle span:nth-child(3) { top: 20px; }
+
+  .nav-toggle.active span:nth-child(1) {
+    top: 13px;
+    transform: rotate(45deg);
+  }
+  .nav-toggle.active span:nth-child(2) {
+    opacity: 0;
+  }
+  .nav-toggle.active span:nth-child(3) {
+    top: 13px;
+    transform: rotate(-45deg);
+  }
+
+  /* ====== RESPONSIVE HEADER ====== */
+@media (max-width: 768px) {
+
+    /* Hiện nút toggle (3 gạch) trên mobile */
+    .nav-toggle { 
+      display: block; 
+    }
+  
+    /* Menu chính đổi thành dạng dọc + ẩn đi */
+    .main-nav {
+      text-align: center;
+      gap: 0px;
+      display: none;           /* mặc định ẩn */
+      flex-direction: column;  /* chuyển thành layout dọc */
+      position: absolute;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      padding: 0;
+      margin-top: 15px;
+      z-index: 10;
+    }
+  
+    /* Khi menu mở (ví dụ khi click burger) */
+    .main-nav.open { 
+      display: flex; 
+    }
+  
+    /* Style từng item bên trong menu mobile */
+    .main-nav a,
+    .main-nav .dropdown-toggle {
+      padding: 15px 16px;
+      border-radius: 0;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      width: 100%;
+      text-align: left;
+      justify-content: flex-start;
+      background: transparent;
+    }
+
+    .nav-dropdown {
+      width: 100%;
+      flex-direction: column;
+      position: relative;
+    }
+    .dropdown-menu {
+      position: static;
+      box-shadow: none;
+      border-radius: 0;
+      background: rgba(255,255,255,0.08);
+    }
+    .dropdown-menu a {
+      color: #000000;
+      padding-left: 24px;
+    }
+    .dropdown-menu a:hover {
+      background: #1f73f0;
+    }
+    .dropdown-menu.show {
+      padding: 0;
+      display: flex;
+      background-color: #98cae7;
+    }
+  }
+  
+  /* Mobile rất nhỏ */
+  @media (max-width: 480px) {
+    .logo { 
+      font-size: 18px; 
+      padding: 15px; 
+    }
+  }
+  
