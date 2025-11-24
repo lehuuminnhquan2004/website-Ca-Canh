@@ -39,8 +39,10 @@ if (file_exists($logoFilePath)) {
 
       <nav class="main-nav">
         <a href="./">Trang chủ</a>
-        <a href="./products.php">Sản phẩm</a>
-        <a href="./categories.php">Danh muc</a>
+        <a href="./products.php">Phụ kiện</a>
+        <a href="./fishs.php">Cá cảnh</a>
+        <a href="./categories.php">Loại phụ kiện</a>
+        <a href="./fish-categories.php">Loại cá cảnh</a>
         <a href="./blog-list.php">Blog</a>
         <a href="./banner-settings.php">Banner</a>
 
