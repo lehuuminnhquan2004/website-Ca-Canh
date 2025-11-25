@@ -1,9 +1,19 @@
 {
+    "phone": "123456",
+    "zalo": "0328421191",
+    "messenger": "https:\/\/www.facebook.com\/lehuuminhquan",
+    "facebook": "https:\/\/www.facebook.com\/lehuuminhquan",
+    "tiktok": "",
+    "youtube": "",
+    "featured_products": [],
+    "banners": [
+        "1763918979_692344837aa00.webp",
+        "1763918982_69234486ea5fe.jpg",
+        "1763918986_6923448a8ae1c.jpg"
+    ],
     "categories_order": [
-        1,
-        2,
-        9,
         8,
+        9,
         7,
         6,
         5,
@@ -12,14 +22,8 @@
         4,
         10
     ],
-    "banners": [
-        "1763918979_692344837aa00.webp",
-        "1763918982_69234486ea5fe.jpg",
-        "1763918986_6923448a8ae1c.jpg"
-    ],
-    "phone": "123456",
-    "zalo": "0328421191",
-    "messenger": "https:\/\/www.facebook.com\/lehuuminhquan",
-    "facebook": "https:\/\/www.facebook.com\/lehuuminhquan",
-    "featured_products": []
+    "fish_categories_order": [
+        2,
+        1
+    ]
 }

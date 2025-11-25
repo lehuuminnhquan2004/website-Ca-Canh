@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 session_start();
 if (empty($_SESSION['admin_id'])) {
     header("Location: /admin/login.php");
@@ -40,7 +40,8 @@ if (isset($_GET['id'])) {
 }
 
 // Giữ lại query khi quay về list
-$returnQuery = isset($_REQUEST['return']) ? $_REQUEST['return'] : '';
+$returnRaw = isset($_REQUEST['return']) ? $_REQUEST['return'] : '';
+$returnQuery = $returnRaw ? urldecode($returnRaw) : '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -157,8 +158,8 @@ button, input, select, textarea { font-size:16px; }
 
 <form method="post" enctype="multipart/form-data">
     <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-    <?php if (!empty($returnQuery)): ?>
-      <input type="hidden" name="return" value="<?= htmlspecialchars($returnQuery) ?>">
+    <?php if (!empty($returnRaw)): ?>
+      <input type="hidden" name="return" value="<?= htmlspecialchars($returnRaw) ?>">
     <?php endif; ?>
 
     <div>
@@ -209,15 +210,14 @@ button, input, select, textarea { font-size:16px; }
         </div>
         <input type="file" name="thumbnail" id="thumbnail" accept="image/*" style="display:none;">
         <img id="preview" class="preview"
-             src="<?= !empty($product['thumbnail']) ? htmlspecialchars($product['thumbnail']) : '' ?>"
+             src="<?= !empty($product['thumbnail']) ? ".".htmlspecialchars($product['thumbnail']) : '' ?>"
              style="<?= !empty($product['thumbnail']) ? '' : 'display:none;' ?>"
              alt="thumbnail">
     </div>
 
     <button type="submit" class="btn"><?= $isEdit ? "Cập nhật" : "Thêm mới" ?></button>
-    <a class="btn" href="./fishs.php">Quay lại</a>
+    <a class="btn" href="./fishs.php<?php echo !empty($returnQuery)?"?".htmlspecialchars($returnQuery):""; ?>">Quay lại</a>
 </form>
-
 
 </div>
 
@@ -273,8 +273,8 @@ button, input, select, textarea { font-size:16px; }
 
     const toSlug = (str) => {
       return str
-        .replace(/đ/g, 'd').replace(/Đ/g, 'd') // đổi đ -> d
-        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd').replace(/Đ/g, 'd')
+        .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '')

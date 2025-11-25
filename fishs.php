@@ -3,8 +3,24 @@ $page_title = "Cá cảnh";
 include __DIR__ . '/includes/db.php';
 include __DIR__ . '/includes/header.php';
 
+// Đọc cấu hình thứ tự danh mục cá
+$configPath = __DIR__ . '/includes/site-config.json';
+$fishCatOrder = [];
+if (file_exists($configPath)) {
+    $cfg = json_decode(file_get_contents($configPath), true);
+    if (!empty($cfg['fish_categories_order']) && is_array($cfg['fish_categories_order'])) {
+        $fishCatOrder = array_map('intval', $cfg['fish_categories_order']);
+    }
+}
+
 // Lấy danh sách danh mục cá
-$sql_categories = "SELECT * FROM fish_categories ORDER BY name ASC";
+$sql_categories = "SELECT * FROM fish_categories";
+if (!empty($fishCatOrder)) {
+    $orderIds = implode(',', $fishCatOrder);
+    $sql_categories .= " ORDER BY FIELD(id, $orderIds), name ASC";
+} else {
+    $sql_categories .= " ORDER BY name ASC";
+}
 $cat_res = mysqli_query($conn, $sql_categories);
 $categories = [];
 while ($row = mysqli_fetch_assoc($cat_res)) {
@@ -39,18 +55,23 @@ $sortLabels = [
 ];
 $sortText = $sortLabels[$sortOption] ?? $sortLabels['newest'];
 
-// Base query
-$sql_products = "SELECT * FROM fishs WHERE 1";
+// PHÂN TRANG
+$perPage = 20;
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$offset = ($page - 1) * $perPage;
+
+// Base query (for reuse)
+$baseWhere = "WHERE 1";
 
 // Lọc theo danh mục
 if ($selectedCategoryId > 0) {
-    $sql_products .= " AND category_id = $selectedCategoryId";
+    $baseWhere .= " AND category_id = $selectedCategoryId";
 }
 
 // Tìm kiếm theo tên
 if ($searchKeyword !== '') {
     $keywordEscaped = mysqli_real_escape_string($conn, $searchKeyword);
-    $sql_products .= " AND name LIKE '%$keywordEscaped%'";
+    $baseWhere .= " AND name LIKE '%$keywordEscaped%'";
 }
 
 // Sắp xếp (ưu tiên status=1 lên trước)
@@ -72,7 +93,22 @@ switch ($sortOption) {
         $orderClauses[] = "created_at DESC";
         break;
 }
-$sql_products .= " ORDER BY " . implode(', ', $orderClauses);
+
+$countSql = "SELECT COUNT(*) AS total FROM fishs $baseWhere";
+$totalRows = (int)mysqli_fetch_assoc(mysqli_query($conn, $countSql))['total'];
+$totalPages = max(1, (int)ceil($totalRows / $perPage));
+if ($page > $totalPages) {
+    $page = $totalPages;
+    $offset = ($page - 1) * $perPage;
+}
+
+$buildPageLink = function($pageNum) {
+    $params = $_GET;
+    $params['page'] = $pageNum;
+    return '?' . http_build_query($params);
+};
+
+$sql_products = "SELECT * FROM fishs $baseWhere ORDER BY " . implode(', ', $orderClauses) . " LIMIT $perPage OFFSET $offset";
 
 $prod_res = mysqli_query($conn, $sql_products);
 $products = [];
@@ -229,6 +265,15 @@ document.addEventListener('DOMContentLoaded', () => {
             </a>
         <?php endforeach; ?>
     </div>
+    <?php if ($totalPages > 1): ?>
+        <div class="pagination">
+            <a class="page-link prev <?= $page <= 1 ? 'disabled' : '' ?>" href="<?= $page > 1 ? $buildPageLink($page - 1) : '#' ?>">&#171; Prev</a>
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <a class="page-link <?= $i == $page ? 'active' : '' ?>" href="<?= $buildPageLink($i) ?>"><?= $i ?></a>
+            <?php endfor; ?>
+            <a class="page-link next <?= $page >= $totalPages ? 'disabled' : '' ?>" href="<?= $page < $totalPages ? $buildPageLink($page + 1) : '#' ?>">Next &#187;</a>
+        </div>
+    <?php endif; ?>
 <?php endif; ?>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>

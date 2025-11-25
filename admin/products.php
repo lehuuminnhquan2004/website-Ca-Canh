@@ -45,6 +45,7 @@ $selectedCategoryId = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 
 $searchKeyword      = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
 $sortOption         = isset($_GET['sort']) ? $_GET['sort'] : 'newest';
 $filterNoImage      = isset($_GET['no_image']) ? (int)$_GET['no_image'] : 0;
+$filterStatus       = isset($_GET['status']) ? (int)$_GET['status'] : -1; // -1: tất cả
 $currentFilters     = $_GET;
 $returnQuery = http_build_query($currentFilters);
 
@@ -72,6 +73,9 @@ if (!empty($searchKeyword)) {
 }
 if ($filterNoImage) {
     $countSql .= " AND (thumbnail IS NULL OR thumbnail = '')";
+}
+if ($filterStatus === 0 || $filterStatus === 1) {
+    $countSql .= " AND status = $filterStatus";
 }
 
 $countRes = mysqli_query($conn, $countSql);
@@ -116,6 +120,9 @@ if (!empty($searchKeyword)) {
 }
 if ($filterNoImage) {
     $sql .= " AND (p.thumbnail IS NULL OR p.thumbnail = '')";
+}
+if ($filterStatus === 0 || $filterStatus === 1) {
+    $sql .= " AND p.status = $filterStatus";
 }
 
 $sql .= " ORDER BY $orderBy LIMIT $limit OFFSET $offset";
@@ -176,6 +183,15 @@ $res = mysqli_query($conn, $sql);
         <label for="no_image" style="margin:0;">Chưa có ảnh</label>
       </div>
 
+      <!-- Lọc trạng thái -->
+      <div class="filter-item">
+        <select name="status" onchange="filterForm.submit()">
+          <option value="-1" <?= $filterStatus===-1 ? 'selected' : '' ?>>-- Tất cả trạng thái --</option>
+          <option value="1" <?= $filterStatus===1 ? 'selected' : '' ?>>Còn hàng</option>
+          <option value="0" <?= $filterStatus===0 ? 'selected' : '' ?>>Hết hàng</option>
+        </select>
+      </div>
+
       <button class="btn-filter" type="submit">Lọc</button>
 
     </div>
@@ -193,6 +209,7 @@ $res = mysqli_query($conn, $sql);
                 <th>Danh mục</th>
                 <th>Giá</th>
                 <th>Slug</th>
+                <th>Trạng thái</th>
                 <th>Hành động</th>
             </tr>
 
@@ -218,6 +235,7 @@ $res = mysqli_query($conn, $sql);
                     <td><?= htmlspecialchars($row['category_name'] ?? 'N/A') ?></td>
                     <td><?= number_format($row['price']) ?></td>
                     <td><?= htmlspecialchars($row['slug']) ?></td>
+                    <td><?= ((int)$row['status'] === 1) ? 'Còn hàng' : 'Hết hàng' ?></td>
 
                     <td>
                         <a class="btn small" href="./product-form.php?id=<?= $row['id'] ?><?= $returnQuery ? ('&return=' . urlencode($returnQuery)) : '' ?>">Sửa</a>

@@ -55,18 +55,23 @@ $sortLabels = [
 ];
 $sortText = $sortLabels[$sortOption] ?? $sortLabels['newest'];
 
-// Base query
-$sql_products = "SELECT * FROM products WHERE 1";
+// PHÂN TRANG
+$perPage = 20;
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$offset = ($page - 1) * $perPage;
+
+// Base query (dùng lại cho đếm)
+$baseWhere = "WHERE 1";
 
 // Lọc theo danh mục
 if ($selectedCategoryId > 0) {
-    $sql_products .= " AND category_id = $selectedCategoryId";
+    $baseWhere .= " AND category_id = $selectedCategoryId";
 }
 
 // Tìm kiếm theo tên
 if ($searchKeyword !== '') {
     $keywordEscaped = mysqli_real_escape_string($conn, $searchKeyword);
-    $sql_products .= " AND name LIKE '%$keywordEscaped%'";
+    $baseWhere .= " AND name LIKE '%$keywordEscaped%'";
 }
 
 // Sắp xếp (ưu tiên status=1 lên trước)
@@ -88,7 +93,23 @@ switch ($sortOption) {
         $orderClauses[] = "created_at DESC";
         break;
 }
-$sql_products .= " ORDER BY " . implode(', ', $orderClauses);
+
+// Đếm tổng
+$countSql = "SELECT COUNT(*) AS total FROM products $baseWhere";
+$totalRows = (int)mysqli_fetch_assoc(mysqli_query($conn, $countSql))['total'];
+$totalPages = max(1, (int)ceil($totalRows / $perPage));
+if ($page > $totalPages) {
+    $page = $totalPages;
+    $offset = ($page - 1) * $perPage;
+}
+$buildPageLink = function($pageNum) {
+    $params = $_GET;
+    $params['page'] = $pageNum;
+    return '?' . http_build_query($params);
+};
+
+// Lấy sản phẩm
+$sql_products = "SELECT * FROM products $baseWhere ORDER BY " . implode(', ', $orderClauses) . " LIMIT $perPage OFFSET $offset";
 
 $prod_res = mysqli_query($conn, $sql_products);
 $products = [];
@@ -245,6 +266,15 @@ document.addEventListener('DOMContentLoaded', () => {
             </a>
         <?php endforeach; ?>
     </div>
+    <?php if ($totalPages > 1): ?>
+        <div class="pagination">
+            <a class="page-link prev <?= $page <= 1 ? 'disabled' : '' ?>" href="<?= $page > 1 ? $buildPageLink($page - 1) : '#' ?>">&#171; Prev</a>
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <a class="page-link <?= $i == $page ? 'active' : '' ?>" href="<?= $buildPageLink($i) ?>"><?= $i ?></a>
+            <?php endfor; ?>
+            <a class="page-link next <?= $page >= $totalPages ? 'disabled' : '' ?>" href="<?= $page < $totalPages ? $buildPageLink($page + 1) : '#' ?>">Next &#187;</a>
+        </div>
+    <?php endif; ?>
 <?php endif; ?>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>

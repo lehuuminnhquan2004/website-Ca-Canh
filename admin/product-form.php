@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 if (empty($_SESSION['admin_id'])) {
     header("Location: /admin/login.php");
@@ -53,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price       = (int)$_POST['price'];
     $desc        = mysqli_real_escape_string($conn, $_POST['description']);
     $category_id = (int)$_POST['category_id'];
+    $status      = isset($_POST['status']) ? (int)$_POST['status'] : 1;
 
     // Ảnh cũ
     $thumbnail = $product['thumbnail'] ?? '';
@@ -102,13 +103,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     price=$price,
                     thumbnail='$thumbnail',
                     description='$desc',
-                    category_id=$category_id
+                    category_id=$category_id,
+                    status=$status
                 WHERE id=" . (int)$product['id'];
     } else {
         $sql = "INSERT INTO products
-                    (name, slug, price, thumbnail, description, category_id)
+                    (name, slug, price, thumbnail, description, category_id, status)
                 VALUES
-                    ('$name','$slug',$price,'$thumbnail','$desc',$category_id)";
+                    ('$name','$slug',$price,'$thumbnail','$desc',$category_id,$status)";
     }
 
     $ok = mysqli_query($conn, $sql);
@@ -180,7 +182,13 @@ button, input, select, textarea { font-size:16px; }
     </select>
 
     <label>Giá (VNĐ)</label>
-    <input type="number" name="price" value="<?= htmlspecialchars($product['price'] ?? '') ?>">
+    <input type="number" name="price" min="0" value="<?= htmlspecialchars($product['price'] ?? 0) ?>">
+
+    <label>Trạng thái</label>
+    <select name="status">
+        <option value="1" <?= (!isset($product['status']) || (int)$product['status'] === 1) ? 'selected' : '' ?>>Còn hàng</option>
+        <option value="0" <?= (isset($product['status']) && (int)$product['status'] === 0) ? 'selected' : '' ?>>Hết hàng</option>
+    </select>
 
     <label>Ảnh sản phẩm</label>
 
@@ -224,20 +232,30 @@ button, input, select, textarea { font-size:16px; }
 
 <script>
 // ===== TẠO SLUG TỰ ĐỘNG =====
-document.getElementById('name').addEventListener('input', function() {
-    document.getElementById('slug').value = createSlug(this.value);
-});
-function createSlug(str){
-    str = str.toLowerCase();
-    // Chuyển tiếng Việt sang không dấu
-    const from = 'áàảãạăắằẳẵặâấầẩẫậđéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵ';
-    const to   = 'aaaaaaaaaaaaaaaaadeeeeeeeeeeeiiiiiiooooooooooooooooouuuuuuuuuuuuyyyyy';
-    for (let i = 0; i < from.length; i++) {
-        str = str.replace(new RegExp(from[i], 'g'), to[i]);
-    }
-    str = str.replace(/[^a-z0-9\s-]/g,'');
-    str = str.replace(/\s+/g,'-').replace(/-+/g,'-');
-    return str.replace(/^-+|-+$/g,'');
+const nameInput = document.getElementById('name');
+const slugInput = document.getElementById('slug');
+
+if (nameInput && slugInput) {
+  let slugEdited = false;
+
+  slugInput.addEventListener('input', () => {
+    slugEdited = true;
+  });
+
+  const toSlug = (str) => {
+    return str
+      .replace(/đ/g, 'd').replace(/Đ/g, 'd')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .replace(/--+/g, '-');
+  };
+
+  nameInput.addEventListener('input', () => {
+    if (slugEdited) return;
+    slugInput.value = toSlug(nameInput.value);
+  });
 }
 
 // ===== UPLOAD ẢNH: CLICK CHỌN FILE =====
@@ -253,7 +271,7 @@ document.getElementById('fileInput').addEventListener('change', function(e){
     }
 });
 
-// ===== KÉO – THẢ ẢNH =====
+// ===== KÉO & THẢ ẢNH =====
 const dropZone = document.getElementById('dropZone');
 
 ['dragenter','dragover'].forEach(eventName => {
@@ -307,7 +325,7 @@ function handleImageFile(file){
     reader.onload = function(ev){
         const img = new Image();
         img.onload = function(){
-            // Giới hạn kích thước (ví dụ max 1024px)
+            // Giới hạn kích thước (max 1024px)
             const maxWidth = 1024;
             const maxHeight = 1024;
 
@@ -334,7 +352,7 @@ function handleImageFile(file){
                         return;
                     }
 
-                    // Nếu vẫn >1MB và còn có thể giảm chất lượng
+                    // Nếu vẫn >1MB và cần có thể giảm chất lượng
                     if (blob.size > maxBytes && quality > 0.4) {
                         return compressAndAssign(quality - 0.1);
                     }

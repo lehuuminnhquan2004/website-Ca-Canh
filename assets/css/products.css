@@ -45,27 +45,79 @@
 
 .pagination {
     display: flex;
-    gap: 8px;
-    margin: 16px 0;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 22px 0 32px;
     flex-wrap: wrap;
 }
 
 .pagination .page-link {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    color: #0077aa;
+    padding: 9px 14px;
+    border: 1px solid #dbe2ea;
+    border-radius: 12px;
+    color: #0b6b9e;
     text-decoration: none;
+    background: #ffffff;
+    box-shadow: 0 6px 16px rgba(0, 117, 196, 0.12);
+    transition: all 0.2s ease;
+    font-weight: 600;
 }
 
 .pagination .page-link.active {
-    background: #0077aa;
+    background: linear-gradient(135deg, #00a1ff, #006edc);
     color: #fff;
-    border-color: #0077aa;
+    border-color: #0089df;
+    box-shadow: 0 10px 24px rgba(0, 120, 210, 0.25);
 }
 
 .pagination .page-link.prev,
 .pagination .page-link.next {
+    font-weight: 700;
+}
+.pagination .page-link.current {
+    background: #f1f7ff;
+    border-style: dashed;
+    border-color: #c8d8ee;
+    color: #0b6b9e;
+    box-shadow: none;
+}
+.pagination .page-link:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(0, 117, 196, 0.18);
+}
+.pagination .page-link.disabled {
+    pointer-events: none;
+    opacity: 0.4;
+    box-shadow: none;
+}
+
+/* Pagination block (simple prev/next) */
+.pagination-front {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0 26px;
+    flex-wrap: wrap;
+}
+.pagination-front .page-link {
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid #cbd5e1;
+    color: #0b4a7d;
+    background: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+.pagination-front .page-link.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+.pagination-front .current {
+    padding: 6px 10px;
+    color: #475569;
     font-weight: 600;
 }
 

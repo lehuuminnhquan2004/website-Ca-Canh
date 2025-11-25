@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1:3306
--- Thời gian đã tạo: Th10 24, 2025 lúc 11:19 AM
+-- Thời gian đã tạo: Th10 24, 2025 lúc 07:19 PM
 -- Phiên bản máy phục vụ: 9.1.0
 -- Phiên bản PHP: 8.3.14
 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `admins` (
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `admins`
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `blog_posts` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `blog_posts`
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `slug` varchar(191) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `categories`
@@ -100,8 +100,6 @@ INSERT INTO `categories` (`id`, `name`, `slug`) VALUES
 (5, 'Máy oxy – Sủi – Tạo luồng', 'may-oxi-sui-tao-luong'),
 (4, 'Thuốc & khoáng cho hồ cá', 'thuoc-khoang'),
 (3, 'Thức ăn cho cá – tép', 'thuc-an-ca-canh'),
-(2, 'Tép cảnh', 'tep-canh'),
-(1, 'Cá cảnh', 'ca-canh'),
 (10, 'Trang trí hồ cá', 'trang-tri-ho'),
 (11, 'Nền – Cát – Sỏi', 'nen-cat-soi');
 
@@ -125,7 +123,15 @@ CREATE TABLE IF NOT EXISTS `fishs` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`),
   KEY `category_id` (`category_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `fishs`
+--
+
+INSERT INTO `fishs` (`id`, `category_id`, `name`, `slug`, `price`, `thumbnail`, `description`, `created_at`, `status`) VALUES
+(1, 1, 'Cá rồng huyết long', 'ca-rong-huyet-long', 300000, './images/uploads/1764008672_6924a2e006f63.jpg', '', '2025-11-24 11:41:12', 0),
+(2, 2, 'Cá chép sư tử', 'ca-chep-su-tu', 350000, './images/uploads/1764008575_6924a27fc7645.webp', '', '2025-11-24 18:22:55', 1);
 
 -- --------------------------------------------------------
 
@@ -140,7 +146,15 @@ CREATE TABLE IF NOT EXISTS `fish_categories` (
   `slug` varchar(191) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `fish_categories`
+--
+
+INSERT INTO `fish_categories` (`id`, `name`, `slug`) VALUES
+(1, 'Cá rồng', 'ca-rong'),
+(2, 'chép sư tử', 'chep-su-tu');
 
 -- --------------------------------------------------------
 
@@ -162,43 +176,43 @@ CREATE TABLE IF NOT EXISTS `products` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`),
   KEY `category_id` (`category_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=477 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=477 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `products`
 --
 
 INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `price`, `thumbnail`, `description`, `created_at`, `status`) VALUES
-(455, 7, 'Đèn XML 80 trắng', 'en-xml-80-trang', 365000, './images/uploads/1763887078_6922c7e65887c.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(455, 7, 'Đèn XML 80 trắng', 'en-xml-80-trang', 365000, './images/uploads/1763887078_6922c7e65887c.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 0),
 (454, 7, 'Đèn XML 80 đỏ', 'den-xml-80-do', 365000, './images/uploads/1763887331_6922c8e323530.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(453, 7, 'Đèn XML 60 vàng', 'en-xml-60-vang', 285000, './images/uploads/1763887467_6922c96bdba5a.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(453, 7, 'Đèn XML 60 vàng', 'en-xml-60-vang', 285000, './images/uploads/1763983559_692440c77de40.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
 (452, 7, 'Đèn XML 60 trắng', 'en-xml-60-trang', 285000, './images/uploads/1763887474_6922c9725ca0c.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
 (451, 7, 'Đèn XML 60 đỏ', 'en-xml-60-o', 285000, './images/uploads/1763887479_6922c977be24f.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(450, 7, 'Đèn XML 150 vàng', 'en-xml-150-vang', 595000, './images/uploads/1763887540_6922c9b4e1fce.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(449, 7, 'Đèn XML 150 trắng', 'en-xml-150-trang', 595000, './images/uploads/1763887549_6922c9bdeaf8b.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(448, 7, 'Đèn XML 150 đỏ', 'en-xml-150-o', 595000, './images/uploads/1763887556_6922c9c4291da.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(447, 7, 'Đèn XML 120 vàng', 'en-xml-120-vang', 540000, './images/uploads/1763887562_6922c9ca003c7.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(446, 7, 'Đèn XML 120 trắng', 'en-xml-120-trang', 540000, './images/uploads/1763887568_6922c9d0097a5.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(445, 7, 'Đèn XML 120 đỏ', 'en-xml-120-o', 540000, './images/uploads/1763887585_6922c9e1268f1.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(444, 7, 'Đèn XML 100 vàng', 'en-xml-100-vang', 460000, './images/uploads/1763887593_6922c9e91248d.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(443, 7, 'Đèn XML 100 trắng', 'en-xml-100-trang', 460000, './images/uploads/1763887606_6922c9f68a57a.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(442, 7, 'Đèn XML 100 đỏ', 'en-xml-100-o', 460000, './images/uploads/1763887613_6922c9fd0ae42.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(450, 7, 'Đèn XML 150 vàng', 'en-xml-150-vang', 595000, './images/uploads/1763983544_692440b8ab2f0.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(449, 7, 'Đèn XML 150 trắng', 'en-xml-150-trang', 595000, './images/uploads/1763983578_692440da1e39a.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(448, 7, 'Đèn XML 150 đỏ', 'en-xml-150-o', 595000, './images/uploads/1763983584_692440e07876a.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(447, 7, 'Đèn XML 120 vàng', 'en-xml-120-vang', 540000, './images/uploads/1763983597_692440eddb5b5.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(446, 7, 'Đèn XML 120 trắng', 'en-xml-120-trang', 540000, './images/uploads/1763983610_692440fa12dd9.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(445, 7, 'Đèn XML 120 đỏ', 'en-xml-120-o', 540000, './images/uploads/1763983620_6924410456af1.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(444, 7, 'Đèn XML 100 vàng', 'en-xml-100-vang', 460000, './images/uploads/1763983626_6924410a0beed.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(443, 7, 'Đèn XML 100 trắng', 'en-xml-100-trang', 460000, './images/uploads/1763983631_6924410f58e3d.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(442, 7, 'Đèn XML 100 đỏ', 'en-xml-100-o', 460000, './images/uploads/1763983643_6924411b9fcdb.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
 (441, 7, 'Đèn UV Baoyu 9w - hẹn giờ', 'en-uv-baoyu-9w-hen-gio', 220000, './images/uploads/1763887648_6922ca2060e6b.webp', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
 (440, 7, 'Đèn UV Baoyu 7w - hẹn giờ', 'en-uv-baoyu-7w-hen-gio', 210000, './images/uploads/1763887681_6922ca413b766.webp', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
 (439, 7, 'Đèn UV Baoyu 5w - hẹn giờ', 'en-uv-baoyu-5w-hen-gio', 200000, './images/uploads/1763887687_6922ca47d0257.webp', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
 (438, 7, 'Đèn UV 7w jeneca', 'en-uv-7w-jeneca', 130000, './images/uploads/1763887845_6922cae522d57.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
 (437, 7, 'Đèn UV 5w jeneca', 'en-uv-5w-jeneca', 120000, './images/uploads/1763887851_6922caeb33cf1.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
 (436, 7, 'Đèn UV 11w jeneca', 'en-uv-11w-jeneca', 130000, './images/uploads/1763887856_6922caf09414c.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(435, 1, 'Đèn rồng KaoKui 80 vàng', 'en-rong-kaokui-80-vang', 510000, './images/uploads/1763887932_6922cb3cb61e9.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(434, 1, 'Đèn rồng KaoKui 80 đỏ', 'en-rong-kaokui-80-o', 510000, './images/uploads/1763888032_6922cba09ffe9.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(433, 1, 'Đèn rồng KaoKui 180cm vàng', 'en-rong-kaokui-180cm-vang', 900000, './images/uploads/1763888053_6922cbb52b412.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(432, 1, 'Đèn rồng KaoKui 180cm đỏ', 'en-rong-kaokui-180cm-o', 900000, './images/uploads/1763888087_6922cbd701f9b.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(431, 1, 'Đèn rồng KaoKui 150cm vàng', 'en-rong-kaokui-150cm-vang', 700000, './images/uploads/1763888098_6922cbe246e64.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(430, 1, 'Đèn rồng KaoKui 150cm đỏ', 'en-rong-kaokui-150cm-o', 700000, './images/uploads/1763888106_6922cbea127c2.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(429, 1, 'Đèn rồng KaoKui 120cm vàng', 'en-rong-kaokui-120cm-vang', 600000, './images/uploads/1763888114_6922cbf2bdf1f.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(428, 1, 'Đèn rồng KaoKui 120cm đỏ', 'en-rong-kaokui-120cm-o', 600000, './images/uploads/1763888161_6922cc21a4d27.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(427, 1, 'Đèn rồng KaoKui 100cm vàng', 'en-rong-kaokui-100cm-vang', 540000, './images/uploads/1763888170_6922cc2ac84ed.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(426, 1, 'Đèn rồng KaoKui 100 đỏ', 'en-rong-kaokui-100-o', 540000, './images/uploads/1763888184_6922cc382dbfd.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(435, 7, 'Đèn rồng KaoKui 80 vàng', 'en-rong-kaokui-80-vang', 510000, './images/uploads/1763887932_6922cb3cb61e9.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(434, 7, 'Đèn rồng KaoKui 80 đỏ', 'en-rong-kaokui-80-o', 510000, './images/uploads/1763888032_6922cba09ffe9.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(433, 7, 'Đèn rồng KaoKui 180cm vàng', 'en-rong-kaokui-180cm-vang', 900000, './images/uploads/1763888053_6922cbb52b412.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(432, 7, 'Đèn rồng KaoKui 180cm đỏ', 'en-rong-kaokui-180cm-o', 900000, './images/uploads/1763888087_6922cbd701f9b.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(431, 7, 'Đèn rồng KaoKui 150cm vàng', 'en-rong-kaokui-150cm-vang', 700000, './images/uploads/1763888098_6922cbe246e64.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(430, 7, 'Đèn rồng KaoKui 150cm đỏ', 'en-rong-kaokui-150cm-o', 700000, './images/uploads/1763888106_6922cbea127c2.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(429, 7, 'Đèn rồng KaoKui 120cm vàng', 'en-rong-kaokui-120cm-vang', 600000, './images/uploads/1763888114_6922cbf2bdf1f.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(428, 7, 'Đèn rồng KaoKui 120cm đỏ', 'en-rong-kaokui-120cm-o', 600000, './images/uploads/1763888161_6922cc21a4d27.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(427, 7, 'Đèn rồng KaoKui 100cm vàng', 'en-rong-kaokui-100cm-vang', 540000, './images/uploads/1763888170_6922cc2ac84ed.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(426, 7, 'Đèn rồng KaoKui 100 đỏ', 'en-rong-kaokui-100-o', 540000, './images/uploads/1763888184_6922cc382dbfd.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
 (425, 7, 'Đèn rọi KAOKUI F06 18W', 'en-roi-kaokui-f06-18w', 275000, './images/uploads/1763888201_6922cc499af86.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
 (424, 7, 'Đèn rọi KaoKui F03 10W', 'en-roi-kaokui-f03-10w', 130000, './images/uploads/1763888218_6922cc5a6b65e.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
 (423, 7, 'Đèn rẻ 53cm ĐM', 'en-re-53cm-m', 105000, './images/uploads/1763888326_6922ccc64de2a.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
@@ -216,8 +230,8 @@ INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `price`, `thumbnail
 (411, 7, 'Đèn Neo Helios  XP450', 'en-neo-helios-xp450', 330000, './images/uploads/1763887036_6922c7bc4f67a.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
 (410, 7, 'Đèn NaNo S3 Pro 13w', 'en-nano-s3-pro-13w', 160000, './images/uploads/1763886898_6922c732ca202.webp', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
 (409, 7, 'Đèn Nano S3 Plus 13w', 'en-nano-s3-plus-13w', 135000, './images/uploads/1763888472_6922cd5859902.webp', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(408, 7, 'Đèn Led kẹp JENECA SC 80 TX', 'en-led-kep-jeneca-sc-80-tx', 160000, './images/uploads/1763888494_6922cd6e4e43e.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
-(407, 7, 'Đèn Led kẹp JENECA SC 80 đổi màu', 'en-led-kep-jeneca-sc-80-oi-mau', 170000, './images/uploads/1763888517_6922cd85c1982.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(408, 7, 'Đèn Led kẹp JENECA SC 80 TX', 'en-led-kep-jeneca-sc-80-tx', 160000, './images/uploads/1763983693_6924414d04ef7.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
+(407, 7, 'Đèn Led kẹp JENECA SC 80 đổi màu', 'en-led-kep-jeneca-sc-80-oi-mau', 170000, './images/uploads/1763983708_6924415cc60bb.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
 (406, 7, 'Đèn Led kẹp Jeneca SC 60 TX', 'den-led-kep-jeneca-sc-60-tx', 145000, './images/uploads/1763888659_6922ce1333d43.jpg', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
 (405, 7, 'Đèn Led kẹp JENECA SC 60 đm', 'en-led-kep-jeneca-sc-60-m', 150000, '', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
 (404, 7, 'Đèn Led kẹp JENECA SC 50 Đm', 'en-led-kep-jeneca-sc-50-m', 130000, '', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
@@ -244,7 +258,7 @@ INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `price`, `thumbnail
 (383, 9, 'Decal dán hồ 50x35', 'decal-dan-ho-50x35', 45000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (382, 9, 'Decal dán hồ 40x35', 'decal-dan-ho-40x35', 35000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (381, 9, 'Decal dán hồ 30x20', 'decal-dan-ho-30x20', 25000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
-(380, 1, 'Dây trong suốt phi 10', 'day-trong-suot-phi-10', 10000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
+(380, 7, 'Dây trong suốt phi 10', 'day-trong-suot-phi-10', 10000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (379, 8, 'Dây ruột gà ngắn 80cm', 'day-ruot-ga-ngan-80cm', 10000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (378, 8, 'Dây ruột gà dài 1m', 'day-ruot-ga-dai-1m', 10000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (377, 5, 'Dây oxi 4 ly', 'day-oxi-4-ly', 2000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
@@ -259,7 +273,7 @@ INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `price`, `thumbnail
 (368, 8, 'Bộ máy vệ sinh 6in1 Baoyu', 'bo-may-ve-sinh-6in1-baoyu', 330000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (367, 5, 'Kệ 2 ( Máy Oxi, Lọc Bio, Bộ vệ sinh, Đèn,…)', 'ke-2-may-oxi-loc-bio-bo-ve-sinh-en', 0, '', 'Phụ kiện lọc nước cho hồ cá cảnh, hỗ trợ loại bỏ cặn bẩn và tạp chất, giúp nước trong, ổn định môi trường sống cho cá và vi sinh có lợi.', '2025-11-23 08:01:43', 1),
 (366, 8, 'Zero Shock 125ml', 'zero-shock-125ml', 80000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
-(365, 1, 'Vòng cho cá ăn', 'vong-cho-ca-an', 22000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
+(365, 7, 'Vòng cho cá ăn', 'vong-cho-ca-an', 22000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (364, 5, 'Viên sủi CO2', 'vien-sui-co2', 65000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (363, 4, 'Vi sinh tiêu hóa BAC+ 30ML', 'vi-sinh-tieu-hoa-bac-30ml', 40000, '', 'Chế phẩm vi sinh hỗ trợ xử lý chất thải, giảm mùi hôi và ổn định hệ vi sinh trong hồ cá, giúp cá khỏe mạnh và hạn chế bệnh.', '2025-11-23 08:01:43', 1),
 (362, 4, 'Vi sinh tích hợp OBIO  30ml', 'vi-sinh-tich-hop-obio-30ml', 44000, '', 'Chế phẩm vi sinh hỗ trợ xử lý chất thải, giảm mùi hôi và ổn định hệ vi sinh trong hồ cá, giúp cá khỏe mạnh và hạn chế bệnh.', '2025-11-23 08:01:43', 1),
@@ -278,9 +292,9 @@ INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `price`, `thumbnail
 (349, 9, 'Vách ngăn hồ 30x30', 'vach-ngan-ho-30x30', 25000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (348, 9, 'Vách ngăn hồ 30x15', 'vach-ngan-ho-30x15', 15000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (347, 8, 'Túi đựng Purigen', 'tui-ung-purigen', 10000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
-(346, 1, 'Thuốc tím cho cá 50G', 'thuoc-tim-cho-ca-50g', 30000, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
-(345, 1, 'Thuốc tím cho cá 20G', 'thuoc-tim-cho-ca-20g', 15000, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
-(344, 1, 'Thuốc tím cho cá 100G', 'thuoc-tim-cho-ca-100g', 50000, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
+(346, 7, 'Thuốc tím cho cá 50G', 'thuoc-tim-cho-ca-50g', 30000, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
+(345, 7, 'Thuốc tím cho cá 20G', 'thuoc-tim-cho-ca-20g', 15000, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
+(344, 7, 'Thuốc tím cho cá 100G', 'thuoc-tim-cho-ca-100g', 50000, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
 (343, 4, 'Thuốc Tetra NHật loại 2', 'thuoc-tetra-nhat-loai-2', 25000, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
 (342, 4, 'Thuốc Tetra NHật loại 1', 'thuoc-tetra-nhat-loai-1', 45000, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
 (341, 4, 'Thuốc Super one', 'thuoc-super-one', 30000, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
@@ -292,7 +306,7 @@ INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `price`, `thumbnail
 (335, 4, 'Thuốc Knock 3', 'thuoc-knock-3', 30000, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
 (334, 4, 'Thuốc Knock 2', 'thuoc-knock-2', 30000, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
 (333, 4, 'Thuốc knock 1', 'thuoc-knock-1', 30000, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
-(332, 2, 'Thuốc kháng sinh tép 1 viên', 'thuoc-khang-sinh-tep-1-vien', 10000, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
+(332, 4, 'Thuốc kháng sinh tép 1 viên', 'thuoc-khang-sinh-tep-1-vien', 10000, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
 (331, 4, 'Thuốc Diệt rêu tảo hại', 'thuoc-diet-reu-tao-hai', 40000, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
 (330, 4, 'Thuốc diệt ký sinh trùng Naphar', 'thuoc-diet-ky-sinh-trung-naphar', 0, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
 (329, 4, 'Thuốc Diệt Khuẩn Sweep', 'thuoc-diet-khuan-sweep', 45000, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
@@ -314,9 +328,9 @@ INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `price`, `thumbnail
 (313, 4, 'Ống hút thuốc 10ml', 'ong-hut-thuoc-10ml', 4000, '', 'Sản phẩm hỗ trợ phòng và trị một số bệnh thường gặp ở cá cảnh, giúp cá nhanh hồi phục, nên sử dụng đúng liều lượng theo hướng dẫn.', '2025-11-23 08:01:43', 1),
 (312, 8, 'Ống đỏ phi25 1m', 'ong-o-phi25-1m', 60000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (311, 8, 'Ống đỏ phi20 1m', 'ong-o-phi20-1m', 45000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
-(310, 1, 'Máy cho cá ăn SunSun', 'may-cho-ca-an-sunsun', 200000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
-(309, 1, 'Máy cho cá ăn Jeneca Feed', 'may-cho-ca-an-jeneca-feed', 185000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
-(308, 1, 'KoiKA BAC+ 30ML', 'koika-bac-30ml', 40000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
+(310, 7, 'Máy cho cá ăn SunSun', 'may-cho-ca-an-sunsun', 200000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
+(309, 7, 'Máy cho cá ăn Jeneca Feed', 'may-cho-ca-an-jeneca-feed', 185000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
+(308, 7, 'KoiKA BAC+ 30ML', 'koika-bac-30ml', 40000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (307, 8, 'Kiểm tra PH', 'kiem-tra-ph', 32000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (306, 8, 'Kiểm tra NH3,NH4', 'kiem-tra-nh3-nh4', 80000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (305, 8, 'Kiểm tra độ mặn', 'kiem-tra-o-man', 110000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
@@ -324,21 +338,21 @@ INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `price`, `thumbnail
 (303, 4, 'Khử Clo ShangHai', 'khu-clo-shanghai', 15000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (302, 4, 'Khử clo Prime Seachem 250ml', 'khu-clo-prime-seachem-250ml', 265000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (301, 4, 'Khử clo Prime Seachem 100ml', 'khu-clo-prime-seachem-100ml', 160000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
-(300, 1, 'Khoáng tép, cá Nutrafin', 'khoang-tep-ca-nutrafin', 80000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
-(299, 2, 'Khoáng tép GH+', 'khoang-tep-gh', 80000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
+(300, 7, 'Khoáng tép, cá Nutrafin', 'khoang-tep-ca-nutrafin', 80000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
+(299, 4, 'Khoáng tép GH+', 'khoang-tep-gh', 80000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (298, 8, 'khóa vàng thẳng', 'khoa-vang-thang', 3000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (297, 8, 'Khóa vàng chia 3', 'khoa-vang-chia-3', 3000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (296, 8, 'khóa đen thẳng', 'khoa-en-thang', 3000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (295, 8, 'Khóa đen cam', 'khoa-en-cam', 4000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (294, 8, 'Khay trùng chỉ meca', 'khay-trung-chi-meca', 25000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
-(293, 1, 'Khay cho cá ăn Jeneca F35', 'khay-cho-ca-an-jeneca-f35', 75000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
+(293, 7, 'Khay cho cá ăn Jeneca F35', 'khay-cho-ca-an-jeneca-f35', 75000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (292, 8, 'Kẹp góc sinicon', 'kep-goc-sinicon', 25000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (291, 9, 'Kẹp giữ nắp hồ', 'kep-giu-nap-ho', 35000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (290, 8, 'Keo dán rêu', 'keo-dan-reu', 12000, '', 'Keo dán, vật tư hỗ trợ dán, lắp ráp và trang trí hồ cá cảnh, bám dính tốt và an toàn khi sử dụng đúng hướng dẫn.', '2025-11-23 08:01:43', 1),
-(289, 2, 'Hút đáy ngăn tép phi 16 thường', 'hut-ay-ngan-tep-phi-16-thuong', 45000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
-(288, 2, 'Hút đáy ngăn tép phi 16 sịn', 'hut-ay-ngan-tep-phi-16-sin', 70000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
-(287, 2, 'Hút đáy ngăn tép phi 12 thường', 'hut-ay-ngan-tep-phi-12-thuong', 40000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
-(286, 2, 'Hút đáy ngăn tép phi 12 sịn', 'hut-ay-ngan-tep-phi-12-sin', 65000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
+(289, 4, 'Hút đáy ngăn tép phi 16 thường', 'hut-ay-ngan-tep-phi-16-thuong', 45000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
+(288, 4, 'Hút đáy ngăn tép phi 16 sịn', 'hut-ay-ngan-tep-phi-16-sin', 70000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
+(287, 4, 'Hút đáy ngăn tép phi 12 thường', 'hut-ay-ngan-tep-phi-12-thuong', 40000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
+(286, 4, 'Hút đáy ngăn tép phi 12 sịn', 'hut-ay-ngan-tep-phi-12-sin', 65000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (285, 8, 'Hủ Purigen Crystal', 'hu-purigen-crystal', 80000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (284, 5, 'Hít dây oxi xịn', 'hit-day-oxi-xin', 4000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (283, 7, 'Hít dây bơm - đèn xịn', 'hit-day-bom-en-xin', 6000, '', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
@@ -352,37 +366,37 @@ INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `price`, `thumbnail
 (275, 5, 'Chia 3 oxi mica', 'chia-3-oxi-mica', 3000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (274, 5, 'Chia 3 oxi', 'chia-3-oxi', 1000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (273, 5, 'Chia 2 oxi', 'chia-2-oxi', 1000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
-(272, 2, 'Cám tôm tép K Ghost', 'cam-tom-tep-k-ghost', 70000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
+(272, 4, 'Cám tôm tép K Ghost', 'cam-tom-tep-k-ghost', 70000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
 (271, 3, 'Cám Thái G8', 'cam-thai-g8', 30000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
 (270, 3, 'Cám Thái G12', 'cam-thai-g12', 30000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
 (269, 3, 'Cám Thái 5/8', 'cam-thai-5-8', 25000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
 (268, 3, 'Cám Thái 3/5', 'cam-thai-3-5', 28000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
-(267, 2, 'Cám tép cảnh TM', 'cam-tep-canh-tm', 35000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
-(266, 2, 'cám tép cảnh Q3 50g', 'cam-tep-canh-q3-50g', 200000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
-(265, 2, 'Cám tép cảnh Q3 15g', 'cam-tep-canh-q3-15g', 70000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
+(267, 4, 'Cám tép cảnh TM', 'cam-tep-canh-tm', 35000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
+(266, 4, 'cám tép cảnh Q3 50g', 'cam-tep-canh-q3-50g', 200000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
+(265, 4, 'Cám tép cảnh Q3 15g', 'cam-tep-canh-q3-15g', 70000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
 (264, 3, 'Cám ShangHai hủ 50g', 'cam-shanghai-hu-50g', 10000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
 (263, 3, 'Cám ShangHai hủ 170g', 'cam-shanghai-hu-170g', 20000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
 (262, 3, 'Cám Sanko 500g hạt trung', 'cam-sanko-500g-hat-trung', 48000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
 (261, 3, 'Cám Sanko 500g hạt lớn', 'cam-sanko-500g-hat-lon', 48000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
 (260, 3, 'Cám SANKO 5/8', 'cam-sanko-5-8', 20000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
-(259, 1, 'Cám La Hán thiết xanh', 'cam-la-han-thiet-xanh', 150000, '', 'Cám chuyên dùng cho cá La Hán, giúp cá khỏe mạnh, lên màu đẹp, hạt dễ ăn và hạn chế làm đục nước, phù hợp cho hồ cá cảnh gia đình và cửa hàng.', '2025-11-23 08:01:43', 1),
-(258, 1, 'Cám La Hán thiết đen', 'cam-la-han-thiet-en', 150000, '', 'Cám chuyên dùng cho cá La Hán, giúp cá khỏe mạnh, lên màu đẹp, hạt dễ ăn và hạn chế làm đục nước, phù hợp cho hồ cá cảnh gia đình và cửa hàng.', '2025-11-23 08:01:43', 1),
-(257, 1, 'Cám KOI FOOD tăng trọng 1kg S', 'cam-koi-food-tang-trong-1kg-s', 160000, '', 'Cám chuyên dùng cho cá koi, giúp cá khỏe mạnh, lên màu đẹp, hạt dễ ăn và hạn chế làm đục nước, phù hợp cho hồ cá cảnh gia đình và cửa hàng.', '2025-11-23 08:01:43', 1),
-(256, 1, 'Cám KOI FOOD tăng trọng 1kg M', 'cam-koi-food-tang-trong-1kg-m', 160000, '', 'Cám chuyên dùng cho cá koi, giúp cá khỏe mạnh, lên màu đẹp, hạt dễ ăn và hạn chế làm đục nước, phù hợp cho hồ cá cảnh gia đình và cửa hàng.', '2025-11-23 08:01:43', 1),
-(255, 1, 'Cám KOI FOOD tăng màu 1kg S', 'cam-koi-food-tang-mau-1kg-s', 205000, '', 'Cám chuyên dùng cho cá koi, giúp cá khỏe mạnh, lên màu đẹp, hạt dễ ăn và hạn chế làm đục nước, phù hợp cho hồ cá cảnh gia đình và cửa hàng.', '2025-11-23 08:01:43', 1),
-(254, 1, 'Cám KOI FOOD lên màu 1kg M', 'cam-koi-food-len-mau-1kg-m', 205000, '', 'Cám chuyên dùng cho cá koi, giúp cá khỏe mạnh, lên màu đẹp, hạt dễ ăn và hạn chế làm đục nước, phù hợp cho hồ cá cảnh gia đình và cửa hàng.', '2025-11-23 08:01:43', 1),
+(259, 7, 'Cám La Hán thiết xanh', 'cam-la-han-thiet-xanh', 150000, '', 'Cám chuyên dùng cho cá La Hán, giúp cá khỏe mạnh, lên màu đẹp, hạt dễ ăn và hạn chế làm đục nước, phù hợp cho hồ cá cảnh gia đình và cửa hàng.', '2025-11-23 08:01:43', 1),
+(258, 7, 'Cám La Hán thiết đen', 'cam-la-han-thiet-en', 150000, '', 'Cám chuyên dùng cho cá La Hán, giúp cá khỏe mạnh, lên màu đẹp, hạt dễ ăn và hạn chế làm đục nước, phù hợp cho hồ cá cảnh gia đình và cửa hàng.', '2025-11-23 08:01:43', 1),
+(257, 7, 'Cám KOI FOOD tăng trọng 1kg S', 'cam-koi-food-tang-trong-1kg-s', 160000, '', 'Cám chuyên dùng cho cá koi, giúp cá khỏe mạnh, lên màu đẹp, hạt dễ ăn và hạn chế làm đục nước, phù hợp cho hồ cá cảnh gia đình và cửa hàng.', '2025-11-23 08:01:43', 1),
+(256, 7, 'Cám KOI FOOD tăng trọng 1kg M', 'cam-koi-food-tang-trong-1kg-m', 160000, '', 'Cám chuyên dùng cho cá koi, giúp cá khỏe mạnh, lên màu đẹp, hạt dễ ăn và hạn chế làm đục nước, phù hợp cho hồ cá cảnh gia đình và cửa hàng.', '2025-11-23 08:01:43', 1),
+(255, 7, 'Cám KOI FOOD tăng màu 1kg S', 'cam-koi-food-tang-mau-1kg-s', 205000, '', 'Cám chuyên dùng cho cá koi, giúp cá khỏe mạnh, lên màu đẹp, hạt dễ ăn và hạn chế làm đục nước, phù hợp cho hồ cá cảnh gia đình và cửa hàng.', '2025-11-23 08:01:43', 1),
+(254, 7, 'Cám KOI FOOD lên màu 1kg M', 'cam-koi-food-len-mau-1kg-m', 205000, '', 'Cám chuyên dùng cho cá koi, giúp cá khỏe mạnh, lên màu đẹp, hạt dễ ăn và hạn chế làm đục nước, phù hợp cho hồ cá cảnh gia đình và cửa hàng.', '2025-11-23 08:01:43', 1),
 (253, 3, 'Cám Gold Tokyo 500g hạt trung', 'cam-gold-tokyo-500g-hat-trung', 70000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
 (252, 3, 'Cám Gold Tokyo 500g hạt lớn', 'cam-gold-tokyo-500g-hat-lon', 70000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
 (251, 3, 'Cám gói vàng', 'cam-goi-vang', 8000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
 (250, 3, 'Cám dán Biozym Trùng huyết', 'cam-dan-biozym-trung-huyet', 130000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
 (249, 3, 'Cám chép sư tử 500G hạt nhỏ', 'cam-chep-su-tu-500g-hat-nho', 125000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
 (248, 3, 'Cám chép sư tử 500G hạt lớn', 'cam-chep-su-tu-500g-hat-lon', 125000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
-(247, 1, 'Cám cá chuột Loại 1', 'cam-ca-chuot-loai-1', 70000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
+(247, 7, 'Cám cá chuột Loại 1', 'cam-ca-chuot-loai-1', 70000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
 (246, 3, 'Cám Artermia sấy khô 50g', 'cam-artermia-say-kho-50g', 30000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
 (245, 6, 'Bông lọc thác Jeneca', 'bong-loc-thac-jeneca', 35000, '', 'Phụ kiện lọc nước cho hồ cá cảnh, hỗ trợ loại bỏ cặn bẩn và tạp chất, giúp nước trong, ổn định môi trường sống cho cá và vi sinh có lợi.', '2025-11-23 08:01:43', 1),
 (244, 8, 'BỘ Van điện Mufan', 'bo-van-ien-mufan', 550000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (243, 8, 'Bộ van cơ Mufan', 'bo-van-co-mufan', 0, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
-(456, 7, 'Đèn XML 80 vàng', 'en-xml-80-vang', 365000, '', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1);
+(456, 7, 'Đèn XML 80 vàng', 'en-xml-80-vang', 365000, './images/uploads/1763983444_69244054447d0.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1);
 INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `price`, `thumbnail`, `description`, `created_at`, `status`) VALUES
 (457, 4, 'Hẹn giờ cơ xanh', 'hen-gio-co-xanh', 120000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (458, 6, 'Lọc Bio JENECA AF 3', 'loc-bio-jeneca-af-3', 45000, '', 'Phụ kiện lọc nước cho hồ cá cảnh, hỗ trợ loại bỏ cặn bẩn và tạp chất, giúp nước trong, ổn định môi trường sống cho cá và vi sinh có lợi.', '2025-11-23 08:01:43', 1),
