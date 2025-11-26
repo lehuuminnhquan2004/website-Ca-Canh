@@ -274,7 +274,7 @@ button, input, select, textarea { font-size:16px; }
     const toSlug = (str) => {
       return str
         .replace(/đ/g, 'd').replace(/Đ/g, 'd')
-        .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // bỏ dấu tiếng Việt
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '')

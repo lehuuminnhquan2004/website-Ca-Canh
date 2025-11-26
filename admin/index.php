@@ -16,6 +16,7 @@ $config = [
     'tiktok' => '',
     'youtube' => '',
     'featured_products' => [],
+    'featured_fish' => [],
     'banners' => []
 ];
 
@@ -30,8 +31,13 @@ $featuredSelected = [];
 if (!empty($config['featured_products']) && is_array($config['featured_products'])) {
     $featuredSelected = array_map('intval', $config['featured_products']);
 }
+$featuredFishSelected = [];
+if (!empty($config['featured_fish']) && is_array($config['featured_fish'])) {
+    $featuredFishSelected = array_map('intval', $config['featured_fish']);
+}
 
 $featuredInput = implode(', ', $featuredSelected);
+$featuredFishInput = implode(', ', $featuredFishSelected);
 
 $uploadDir = __DIR__ . '/../images/logo/';
 $logoFile = $uploadDir . 'logo.png';
@@ -46,7 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $config['tiktok'] = trim($_POST['tiktok'] ?? '');
     $config['youtube'] = trim($_POST['youtube'] ?? '');
     $featuredInput = trim($_POST['featured_ids'] ?? '');
+    $featuredFishInput = trim($_POST['featured_fish_ids'] ?? '');
     $config['featured_products'] = [];
+    $config['featured_fish'] = [];
 
     if ($featuredInput !== '') {
         $parts = preg_split('/[\\s,;]+/', $featuredInput);
@@ -57,6 +65,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         $featuredSelected = $config['featured_products'];
+    }
+
+    if ($featuredFishInput !== '') {
+        $parts = preg_split('/[\\s,;]+/', $featuredFishInput);
+        foreach ($parts as $p) {
+            $id = (int) $p;
+            if ($id > 0 && !in_array($id, $config['featured_fish'], true)) {
+                $config['featured_fish'][] = $id;
+            }
+        }
+        $featuredFishSelected = $config['featured_fish'];
     }
 
     if (!is_dir($uploadDir)) {
@@ -134,6 +153,12 @@ include __DIR__ . '/admin-header.php';
             <p style="margin:0 0 8px 0; font-weight:bold;">Nhập ID sản phẩm cho mục "Sản phẩm mới" (cách nhau bởi dấu phẩy hoặc khoảng trắng):</p>
             <input type="text" name="featured_ids" value="<?= htmlspecialchars($featuredInput) ?>" placeholder="ví dụ: 12, 5, 9">
             <small>Thứ tự ID bạn nhập sẽ là thứ tự hiển thị. Để trống sẽ tự lấy 6 sản phẩm mới nhất.</small>
+        </div>
+
+        <div style="border:1px solid #eee; padding:10px; border-radius:6px;">
+            <p style="margin:0 0 8px 0; font-weight:bold;">Nhập ID cá cảnh cho mục "Cá cảnh mới" (cách nhau bởi dấu phẩy hoặc khoảng trắng):</p>
+            <input type="text" name="featured_fish_ids" value="<?= htmlspecialchars($featuredFishInput) ?>" placeholder="ví dụ: 2, 4, 9">
+            <small>Thứ tự ID bạn nhập sẽ là thứ tự hiển thị. Để trống sẽ tự lấy 6 cá mới nhất.</small>
         </div>
 
         <button type="submit" class="btn">Lưu cấu hình</button>

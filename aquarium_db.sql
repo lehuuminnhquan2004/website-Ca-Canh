@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1:3306
--- Thời gian đã tạo: Th10 24, 2025 lúc 07:19 PM
+-- Thời gian đã tạo: Th10 25, 2025 lúc 05:31 PM
 -- Phiên bản máy phục vụ: 9.1.0
 -- Phiên bản PHP: 8.3.14
 
@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `fishs` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`),
   KEY `category_id` (`category_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `fishs`
@@ -131,7 +131,11 @@ CREATE TABLE IF NOT EXISTS `fishs` (
 
 INSERT INTO `fishs` (`id`, `category_id`, `name`, `slug`, `price`, `thumbnail`, `description`, `created_at`, `status`) VALUES
 (1, 1, 'Cá rồng huyết long', 'ca-rong-huyet-long', 300000, './images/uploads/1764008672_6924a2e006f63.jpg', '', '2025-11-24 11:41:12', 0),
-(2, 2, 'Cá chép sư tử', 'ca-chep-su-tu', 350000, './images/uploads/1764008575_6924a27fc7645.webp', '', '2025-11-24 18:22:55', 1);
+(2, 2, 'Cá chép sư tử', 'ca-chep-su-tu', 350000, './images/uploads/1764008575_6924a27fc7645.webp', '', '2025-11-24 18:22:55', 1),
+(3, 3, 'Cá chuột mỹ', 'ca-chuot-my', 70000, './images/uploads/1764088376_6925da3890cf5.jpg', '', '2025-11-25 16:32:56', 0),
+(4, 3, 'Cá chuột cà phê', 'ca-chuot-ca-phe', 15000, './images/uploads/1764091168_6925e520a7097.webp', '', '2025-11-25 17:19:28', 1),
+(5, 3, 'Cá Chuột Panda', 'ca-chuot-panda', 25000, './images/uploads/1764091276_6925e58c7945a.jpg', '', '2025-11-25 17:21:16', 1),
+(6, 2, 'Cá Chép Phi Tần Đỏ', 'ca-chep-phi-tan-do', 350000, './images/uploads/1764091322_6925e5baa45d8.jpg', '', '2025-11-25 17:22:02', 0);
 
 -- --------------------------------------------------------
 
@@ -146,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `fish_categories` (
   `slug` varchar(191) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `slug` (`slug`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `fish_categories`
@@ -154,7 +158,8 @@ CREATE TABLE IF NOT EXISTS `fish_categories` (
 
 INSERT INTO `fish_categories` (`id`, `name`, `slug`) VALUES
 (1, 'Cá rồng', 'ca-rong'),
-(2, 'chép sư tử', 'chep-su-tu');
+(2, 'chép sư tử', 'chep-su-tu'),
+(3, 'Cá tầng đáy', 'ca-tang-day');
 
 -- --------------------------------------------------------
 
@@ -277,13 +282,13 @@ INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `price`, `thumbnail
 (364, 5, 'Viên sủi CO2', 'vien-sui-co2', 65000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (363, 4, 'Vi sinh tiêu hóa BAC+ 30ML', 'vi-sinh-tieu-hoa-bac-30ml', 40000, '', 'Chế phẩm vi sinh hỗ trợ xử lý chất thải, giảm mùi hôi và ổn định hệ vi sinh trong hồ cá, giúp cá khỏe mạnh và hạn chế bệnh.', '2025-11-23 08:01:43', 1),
 (362, 4, 'Vi sinh tích hợp OBIO  30ml', 'vi-sinh-tich-hop-obio-30ml', 44000, '', 'Chế phẩm vi sinh hỗ trợ xử lý chất thải, giảm mùi hôi và ổn định hệ vi sinh trong hồ cá, giúp cá khỏe mạnh và hạn chế bệnh.', '2025-11-23 08:01:43', 1),
-(361, 4, 'Vi sinh Seachem Stability 500ml', 'vi-sinh-seachem-stability-500ml', 495000, '', 'Chế phẩm vi sinh hỗ trợ xử lý chất thải, giảm mùi hôi và ổn định hệ vi sinh trong hồ cá, giúp cá khỏe mạnh và hạn chế bệnh.', '2025-11-23 08:01:43', 1),
+(361, 4, 'Vi sinh Seachem Stability 500ml', 'vi-sinh-seachem-stability-500ml', 495000, './images/uploads/1764091484_6925e65c75209.webp', 'Chế phẩm vi sinh hỗ trợ xử lý chất thải, giảm mùi hôi và ổn định hệ vi sinh trong hồ cá, giúp cá khỏe mạnh và hạn chế bệnh.', '2025-11-23 08:01:43', 1),
 (360, 4, 'Vi sinh Seachem Stability 200ml', 'vi-sinh-seachem-stability-200ml', 265000, '', 'Chế phẩm vi sinh hỗ trợ xử lý chất thải, giảm mùi hôi và ổn định hệ vi sinh trong hồ cá, giúp cá khỏe mạnh và hạn chế bệnh.', '2025-11-23 08:01:43', 1),
 (359, 4, 'Vi sinh Seachem Stability 100ml', 'vi-sinh-seachem-stability-100ml', 160000, '', 'Chế phẩm vi sinh hỗ trợ xử lý chất thải, giảm mùi hôi và ổn định hệ vi sinh trong hồ cá, giúp cá khỏe mạnh và hạn chế bệnh.', '2025-11-23 08:01:43', 1),
 (358, 4, 'Vi sinh prime Seachem 250ml', 'vi-sinh-prime-seachem-250ml', 265000, '', 'Chế phẩm vi sinh hỗ trợ xử lý chất thải, giảm mùi hôi và ổn định hệ vi sinh trong hồ cá, giúp cá khỏe mạnh và hạn chế bệnh.', '2025-11-23 08:01:43', 1),
 (357, 4, 'Vi sinh phân hủy Pristine 100ml', 'vi-sinh-phan-huy-pristine-100ml', 160000, '', 'Chế phẩm vi sinh hỗ trợ xử lý chất thải, giảm mùi hôi và ổn định hệ vi sinh trong hồ cá, giúp cá khỏe mạnh và hạn chế bệnh.', '2025-11-23 08:01:43', 1),
 (356, 4, 'Vi sinh JinDi - làm lắng cặn', 'vi-sinh-jindi-lam-lang-can', 12000, '', 'Chế phẩm vi sinh hỗ trợ xử lý chất thải, giảm mùi hôi và ổn định hệ vi sinh trong hồ cá, giúp cá khỏe mạnh và hạn chế bệnh.', '2025-11-23 08:01:43', 1),
-(355, 4, 'Vi sinh Extra Bio 500ml', 'vi-sinh-extra-bio-500ml', 155000, '', 'Chế phẩm vi sinh hỗ trợ xử lý chất thải, giảm mùi hôi và ổn định hệ vi sinh trong hồ cá, giúp cá khỏe mạnh và hạn chế bệnh.', '2025-11-23 08:01:43', 1),
+(355, 4, 'Vi sinh Extra Bio 500ml', 'vi-sinh-extra-bio-500ml', 155000, './images/uploads/1764091521_6925e6818b4dc.webp', 'Chế phẩm vi sinh hỗ trợ xử lý chất thải, giảm mùi hôi và ổn định hệ vi sinh trong hồ cá, giúp cá khỏe mạnh và hạn chế bệnh.', '2025-11-23 08:01:43', 1),
 (354, 4, 'Vi sinh Extra Bio 250ml', 'vi-sinh-extra-bio-250ml', 85000, '', 'Chế phẩm vi sinh hỗ trợ xử lý chất thải, giảm mùi hôi và ổn định hệ vi sinh trong hồ cá, giúp cá khỏe mạnh và hạn chế bệnh.', '2025-11-23 08:01:43', 1),
 (353, 4, 'Vi sinh Extra Bio 125ml', 'vi-sinh-extra-bio-125ml', 50000, '', 'Chế phẩm vi sinh hỗ trợ xử lý chất thải, giảm mùi hôi và ổn định hệ vi sinh trong hồ cá, giúp cá khỏe mạnh và hạn chế bệnh.', '2025-11-23 08:01:43', 1),
 (352, 4, 'Vi sinh Extra Bio 1000ml', 'vi-sinh-extra-bio-1000ml', 270000, '', 'Chế phẩm vi sinh hỗ trợ xử lý chất thải, giảm mùi hôi và ổn định hệ vi sinh trong hồ cá, giúp cá khỏe mạnh và hạn chế bệnh.', '2025-11-23 08:01:43', 1),
@@ -395,9 +400,9 @@ INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `price`, `thumbnail
 (246, 3, 'Cám Artermia sấy khô 50g', 'cam-artermia-say-kho-50g', 30000, '', 'Thức ăn tổng hợp cho nhiều loại cá cảnh, giúp cá phát triển khỏe mạnh, lên màu tự nhiên, hạt dễ ăn và ít làm bẩn nước hồ.', '2025-11-23 08:01:43', 1),
 (245, 6, 'Bông lọc thác Jeneca', 'bong-loc-thac-jeneca', 35000, '', 'Phụ kiện lọc nước cho hồ cá cảnh, hỗ trợ loại bỏ cặn bẩn và tạp chất, giúp nước trong, ổn định môi trường sống cho cá và vi sinh có lợi.', '2025-11-23 08:01:43', 1),
 (244, 8, 'BỘ Van điện Mufan', 'bo-van-ien-mufan', 550000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
-(243, 8, 'Bộ van cơ Mufan', 'bo-van-co-mufan', 0, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
-(456, 7, 'Đèn XML 80 vàng', 'en-xml-80-vang', 365000, './images/uploads/1763983444_69244054447d0.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1);
+(243, 8, 'Bộ van cơ Mufan', 'bo-van-co-mufan', 0, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1);
 INSERT INTO `products` (`id`, `category_id`, `name`, `slug`, `price`, `thumbnail`, `description`, `created_at`, `status`) VALUES
+(456, 7, 'Đèn XML 80 vàng', 'en-xml-80-vang', 365000, './images/uploads/1763983444_69244054447d0.png', 'Đèn chiếu sáng cho hồ cá cảnh, giúp tôn màu cá và cây thủy sinh, đồng thời tạo điểm nhấn nổi bật cho bể trong không gian sống.', '2025-11-23 08:01:43', 1),
 (457, 4, 'Hẹn giờ cơ xanh', 'hen-gio-co-xanh', 120000, '', 'Phụ kiện hồ cá cảnh hỗ trợ chăm sóc và trang trí bể, giúp hệ thống vận hành ổn định và tăng tính thẩm mỹ cho không gian sống.', '2025-11-23 08:01:43', 1),
 (458, 6, 'Lọc Bio JENECA AF 3', 'loc-bio-jeneca-af-3', 45000, '', 'Phụ kiện lọc nước cho hồ cá cảnh, hỗ trợ loại bỏ cặn bẩn và tạp chất, giúp nước trong, ổn định môi trường sống cho cá và vi sinh có lợi.', '2025-11-23 08:01:43', 1),
 (459, 6, 'Lọc Bio QS 200A', 'loc-bio-qs-200a', 135000, '', 'Phụ kiện lọc nước cho hồ cá cảnh, hỗ trợ loại bỏ cặn bẩn và tạp chất, giúp nước trong, ổn định môi trường sống cho cá và vi sinh có lợi.', '2025-11-23 08:01:43', 1),
