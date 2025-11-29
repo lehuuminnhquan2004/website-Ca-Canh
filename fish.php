@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include __DIR__ . '/includes/db.php';
 
 $slug = $_GET['slug'] ?? '';
@@ -34,7 +34,12 @@ if (!$product) {
 }
 
 $page_title = $product['name'];
+$page_description = trim($product['short_description'] ?? $product['description'] ?? $product['name']);
 include __DIR__ . '/includes/header.php';
+?>
+
+<main class="container">
+<?php
 
 $imgFile = $product['thumbnail'] ?: ($product['image'] ?? '');
 if ($imgFile && !preg_match('#^https?://#', $imgFile) && str_starts_with($imgFile, '/') === false) {
@@ -152,5 +157,27 @@ $telHref = $hotline ? 'tel:' . preg_replace('/[^0-9+]/', '', $hotline) : '#';
     </div>
   <?php endif; ?>
 </section>
+
+<?php
+  $availability = $inactive ? "https://schema.org/OutOfStock" : "https://schema.org/InStock";
+  $productUrl = ($_SERVER['HTTP_HOST'] ?? '') ? (((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) : '';
+?>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "<?= htmlspecialchars($product['name']) ?>",
+  "image": "<?= htmlspecialchars($imgSrc) ?>",
+  "description": "<?= htmlspecialchars($page_description) ?>",
+  "sku": "fish-<?= (int)$product['id'] ?>",
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "VND",
+    "price": "<?= (int)$product['price'] ?>",
+    "availability": "<?= $availability ?>",
+    "url": "<?= htmlspecialchars($productUrl) ?>"
+  }
+}
+</script>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>

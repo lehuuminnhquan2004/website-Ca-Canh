@@ -1,5 +1,6 @@
-﻿<?php
-$page_title = "Trang chủ - Cửa hàng cá cảnh";
+<?php
+$page_title = "Trang chủ - Cá cảnh Q8 Aquarium Coffee";
+$page_description = "Cá cảnh Q8 Aquarium Coffee, cá cảnh - phụ kiện hồ cá, tư vấn chăm sóc cá cảnh, kinh nghiệm nuôi cá tại nhà.";
 include __DIR__ . '/includes/db.php';
 include __DIR__ . '/includes/header.php';
 include __DIR__ . '/includes/banner.php';
@@ -8,6 +9,7 @@ include __DIR__ . '/includes/banner.php';
 $configPath = __DIR__ . '/includes/site-config.json';
 $featuredIds = [];
 $featuredFishIds = [];
+$cfg = [];
 if (file_exists($configPath)) {
     $cfg = json_decode(file_get_contents($configPath), true);
     if (!empty($cfg['featured_products']) && is_array($cfg['featured_products'])) {
@@ -62,13 +64,17 @@ if ($blogRes) {
 }
 ?>
 
+<main class="container">
+<h1 class="page-title">Cửa hàng cá cảnh Quận 8 Aquarium Coffee</h1>
+<p class="page-intro">Chọn lọc cá cảnh đẹp, tư vấn setup hồ cá và chăm sóc cá cảnh miễn phí tại nhà.</p>
+
 <section class="sanphammoi fish-section">
   <h2>Cá cảnh mới</h2>
   <?php if (empty($fishList)): ?>
     <p>Chưa có cá cảnh.</p>
   <?php else: ?>
     <div class="product-grid-wrapper">
-      <button class="nav-arrow prev" type="button" aria-label="Xem trước">‹</button>
+      <button class="nav-arrow prev" type="button" aria-label="Xem trước">&#8249;</button>
       <div class="product-grid">
         <?php foreach ($fishList as $row): ?>
           <?php
@@ -77,7 +83,7 @@ if ($blogRes) {
           ?>
           <a class="product-card" href="fish.php?slug=<?= urlencode($row['slug']) ?>">
             <div class="thumb">
-              <img src="<?= htmlspecialchars($imgSrc) ?>" alt="<?= htmlspecialchars($row['name']) ?>">
+              <img loading="lazy" src="<?= htmlspecialchars($imgSrc) ?>" alt="<?= htmlspecialchars($row['name']) ?>">
             </div>
             <div class="info">
               <h3><?= htmlspecialchars($row['name']) ?></h3>
@@ -86,7 +92,7 @@ if ($blogRes) {
           </a>
         <?php endforeach; ?>
       </div>
-      <button class="nav-arrow next" type="button" aria-label="Xem tiếp">›</button>
+      <button class="nav-arrow next" type="button" aria-label="Xem tiếp">&#8250;</button>
     </div>
   <?php endif; ?>
 
@@ -96,12 +102,12 @@ if ($blogRes) {
 </section>
 
 <section class="sanphammoi product-section">
-  <h2>Sản phẩm mới</h2>
+  <h2>Phụ kiện cá cảnh mới</h2>
   <?php if (empty($products)): ?>
     <p>Chưa có sản phẩm.</p>
   <?php else: ?>
     <div class="product-grid-wrapper">
-      <button class="nav-arrow prev" type="button" aria-label="Xem trước">‹</button>
+      <button class="nav-arrow prev" type="button" aria-label="Xem trước">&#8249;</button>
       <div class="product-grid">
         <?php foreach ($products as $row): ?>
           <?php
@@ -110,7 +116,7 @@ if ($blogRes) {
           ?>
           <a class="product-card" href="product.php?slug=<?= urlencode($row['slug']) ?>">
             <div class="thumb">
-              <img src="<?= htmlspecialchars($imgSrc) ?>" alt="<?= htmlspecialchars($row['name']) ?>">
+              <img loading="lazy" src="<?= htmlspecialchars($imgSrc) ?>" alt="<?= htmlspecialchars($row['name']) ?>">
             </div>
             <div class="info">
               <h3><?= htmlspecialchars($row['name']) ?></h3>
@@ -119,18 +125,18 @@ if ($blogRes) {
           </a>
         <?php endforeach; ?>
       </div>
-      <button class="nav-arrow next" type="button" aria-label="Xem tiếp">›</button>
+      <button class="nav-arrow next" type="button" aria-label="Xem tiếp">&#8250;</button>
     </div>
   <?php endif; ?>
 
   <p style="text-align: center; margin-top: 20px;">
-    <a class="button-outline primary" href="products.php">Xem tất cả sản phẩm</a>
+    <a class="button-outline primary" href="products.php">Xem tất cả phụ kiện</a>
   </p>
 </section>
 
 <section class="knowledge-section">
   <h2>Kiến thức hữu ích</h2>
-  <p class="sub">Tổng hợp bài viết hướng dẫn nuôi cá, chăm sóc hồ, xử lý bệnh, setup thuỷ sinh...</p>
+  <p class="sub">Tổng hợp bài viết hướng dẫn nuôi cá, chăm sóc hồ, xử lý bệnh, setup thủy sinh...</p>
 
   <div class="knowledge-grid">
     <?php if (empty($blogs)): ?>
@@ -147,7 +153,7 @@ if ($blogRes) {
         ?>
         <a class="knowledge-card" href="blog_detail.php?slug=<?= urlencode($row['slug']) ?>">
           <div class="thumb">
-            <img src="<?= htmlspecialchars($thumbSrc) ?>" alt="<?= htmlspecialchars($row['title']) ?>">
+            <img loading="lazy" src="<?= htmlspecialchars($thumbSrc) ?>" alt="<?= htmlspecialchars($row['title']) ?>">
           </div>
           <div class="info">
             <h3><?= htmlspecialchars($row['title']) ?></h3>
@@ -162,6 +168,19 @@ if ($blogRes) {
     <a class="button-outline primary" href="blog.php">Xem tất cả bài viết</a>
   </p>
 </section>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Cửa hàng cá cảnh Q8",
+  "url": "<?= htmlspecialchars($canonical ?? '') ?>",
+  "logo": "/images/logo/logo.png",
+  "sameAs": [
+    "<?= htmlspecialchars($cfg['facebook'] ?? '#') ?>",
+    "<?= htmlspecialchars($cfg['youtube'] ?? '#') ?>"
+  ]
+}
+</script>
 <script>
 (() => {
   document.querySelectorAll('.product-grid-wrapper').forEach(wrapper => {
@@ -181,5 +200,7 @@ if ($blogRes) {
   });
 })();
 </script>
+</main>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>
+</main>

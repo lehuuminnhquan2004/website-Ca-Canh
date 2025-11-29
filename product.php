@@ -34,6 +34,7 @@ if (!$product) {
 }
 
 $page_title = $product['name'];
+$page_description = trim($product['short_description'] ?? $product['description'] ?? $product['name']);
 include __DIR__ . '/includes/header.php';
 
 $imgFile = $product['thumbnail'] ?: ($product['image'] ?? '');
@@ -47,6 +48,7 @@ $imgSrc = $imgFile ?: './images/logo/logo.png';
 
 $shortDesc = trim($product['short_description'] ?? '');
 $desc = trim($product['description'] ?? '');
+$inactive = (int)($product['status'] ?? 1) === 0;
 
 // Lấy số điện thoại từ cấu hình (nếu có)
 $configPath = __DIR__ . '/includes/site-config.json';
@@ -152,4 +154,26 @@ $telHref = $hotline ? 'tel:' . preg_replace('/[^0-9+]/', '', $hotline) : '#';
   <?php endif; ?>
 </section>
 
+<?php
+  $availability = $inactive ? "https://schema.org/OutOfStock" : "https://schema.org/InStock";
+  $productUrl = ($_SERVER['HTTP_HOST'] ?? '') ? (((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) : '';
+?>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "<?= htmlspecialchars($product['name']) ?>",
+  "image": "<?= htmlspecialchars($imgSrc) ?>",
+  "description": "<?= htmlspecialchars($page_description) ?>",
+  "sku": "<?= (int)$product['id'] ?>",
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "VND",
+    "price": "<?= (int)$product['price'] ?>",
+    "availability": "<?= $availability ?>",
+    "url": "<?= htmlspecialchars($productUrl) ?>"
+  }
+}
+</script>
+</main>
 <?php include __DIR__ . '/includes/footer.php'; ?>

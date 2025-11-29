@@ -205,5 +205,15 @@
       font-size: 18px; 
       padding: 15px; 
     }
+    .main-nav.open {
+
+      margin-top: 40px;
+    }
+  }
+  @media (min-width: 480px) and (max-width: 768px) {
+    .main-nav.open {
+
+      margin-top: 0;
+    }
   }
   

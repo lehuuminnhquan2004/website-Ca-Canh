@@ -1,5 +1,6 @@
-﻿<?php
-$page_title = "Cá cảnh";
+<?php
+$page_title = "Cá cảnh - Cá cảnh Q8 Aquarium Coffee";
+$page_description = "Danh sách cá cảnh mới, cá rồng, cá chép và nhiều giống cá tại Q8 Aquarium Coffee.";
 include __DIR__ . '/includes/db.php';
 include __DIR__ . '/includes/header.php';
 
@@ -40,6 +41,9 @@ if ($selectedCategoryId > 0) {
         }
     }
 }
+$page_description = $selectedCategoryName
+    ? "Cá cảnh - Danh mục {$selectedCategoryName} tại Q8 Aquarium Coffee."
+    : $page_description;
 
 // Tìm kiếm theo tên
 $searchKeyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
@@ -117,7 +121,11 @@ while ($p = mysqli_fetch_assoc($prod_res)) {
 }
 ?>
 
-<h2>Cá cảnh</h2>
+<main class="container">
+<h1>Cá cảnh</h1>
+<?php if ($selectedCategoryName): ?>
+  <p>Đang xem danh mục: <?= htmlspecialchars($selectedCategoryName) ?></p>
+<?php endif; ?>
 <link rel="stylesheet" href="./assets/css/products.css">
 
 <div class="filter-box">
@@ -255,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ?>
             <a class="card" href="fish.php?slug=<?= urlencode($row['slug']) ?>">
                 <?php if ($imgSrc): ?>
-                    <img src="<?= htmlspecialchars($imgSrc) ?>" alt="<?= htmlspecialchars($row['name']) ?>">
+                    <img loading="lazy" src="<?= htmlspecialchars($imgSrc) ?>" alt="<?= htmlspecialchars($row['name']) ?>">
                 <?php endif; ?>
                 <h3><?= htmlspecialchars($row['name']) ?></h3>
                 <p class="price-line">
@@ -267,13 +275,13 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
     <?php if ($totalPages > 1): ?>
         <div class="pagination">
-            <a class="page-link prev <?= $page <= 1 ? 'disabled' : '' ?>" href="<?= $page > 1 ? $buildPageLink($page - 1) : '#' ?>">&#171; Prev</a>
+            <a class="page-link prev <?= $page <= 1 ? 'disabled' : '' ?>" href="<?= $page > 1 ? $buildPageLink($page - 1) : '#' ?>">&#171; Trước</a>
             <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                 <a class="page-link <?= $i == $page ? 'active' : '' ?>" href="<?= $buildPageLink($i) ?>"><?= $i ?></a>
             <?php endfor; ?>
-            <a class="page-link next <?= $page >= $totalPages ? 'disabled' : '' ?>" href="<?= $page < $totalPages ? $buildPageLink($page + 1) : '#' ?>">Next &#187;</a>
+            <a class="page-link next <?= $page >= $totalPages ? 'disabled' : '' ?>" href="<?= $page < $totalPages ? $buildPageLink($page + 1) : '#' ?>">Sau &#187;</a>
         </div>
     <?php endif; ?>
 <?php endif; ?>
-
+</main>
 <?php include __DIR__ . '/includes/footer.php'; ?>

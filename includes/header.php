@@ -9,15 +9,43 @@ if (file_exists($logoFilePath)) {
 } else {
   $logoUrl = './images/icons/icon-zalo.png';
 }
+
+// Basic SEO meta
+$siteName = 'Cá cảnh Q8 Aquarium Coffee';
+$pageTitle = isset($page_title) ? $page_title : $siteName;
+$pageDesc = isset($page_description) && $page_description !== ''
+  ? $page_description
+  : 'Cửa hàng cá cảnh Quận 8 Aquarium Coffee - Nơi cung cấp cá cảnh và phụ kiện cá cảnh chất lượng cao với giá cả hợp lý. Tư vấn chăm sóc cá cảnh tận tình. Giao hàng toàn quốc.';
+
+// Canonical
+$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$host = $_SERVER['HTTP_HOST'] ?? '';
+$uri  = strtok($_SERVER['REQUEST_URI'] ?? '', '#');
+$canonical = ($host && $uri) ? $scheme . '://' . $host . $uri : '';
 ?>
 <!DOCTYPE html>
 <html lang="vi">
 
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" type="image/png" href="../images/logo/logo.png">
-  <title><?= isset($page_title) ? $page_title : "Cửa hàng cá cảnh" ?></title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"> <!-- bắt buộc cho mobile -->
+  <link rel="icon" type="image/png" href="/images/logo/logo.png">
+  <title><?= htmlspecialchars($pageTitle) ?></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="description" content="<?= htmlspecialchars($pageDesc) ?>">
+  <?php if ($canonical): ?>
+    <link rel="canonical" href="<?= htmlspecialchars($canonical) ?>">
+  <?php endif; ?>
+  <meta property="og:title" content="<?= htmlspecialchars($pageTitle) ?>">
+  <meta property="og:description" content="<?= htmlspecialchars($pageDesc) ?>">
+  <meta property="og:image" content="<?= htmlspecialchars(str_replace('./', '/', $logoUrl)) ?>">
+  <meta property="og:type" content="website">
+  <?php if ($canonical): ?>
+    <meta property="og:url" content="<?= htmlspecialchars($canonical) ?>">
+  <?php endif; ?>
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="<?= htmlspecialchars($pageTitle) ?>">
+  <meta name="twitter:description" content="<?= htmlspecialchars($pageDesc) ?>">
+  <meta name="twitter:image" content="<?= htmlspecialchars(str_replace('./', '/', $logoUrl)) ?>">
   <link rel="stylesheet" href="./assets/css/style.css">
   <link rel="stylesheet" href="./assets/css/header.css">
 </head>
@@ -26,8 +54,8 @@ if (file_exists($logoFilePath)) {
   <header class="site-header">
     <div class="container header-inner">
       <div class="logo">
-        <img src="<?= $logoUrl ?>" alt="Cửa hàng cá cảnh">
-        <a href="./">Cửa hàng cá cảnh</a>
+        <img src="<?= $logoUrl ?>" alt="Cá cảnh Q8 Aquarium Coffee">
+        <a href="./">Cá cảnh Q8 Aquarium Coffee</a>
       </div>
 
 
@@ -49,7 +77,9 @@ if (file_exists($logoFilePath)) {
             <a href="./products.php">Phụ kiện cá cảnh</a>
           </div>
         </div>
+        
         <a href="./blog.php">Kiến thức cá cảnh</a>
+        <a href="./about.php">Giới thiệu</a>
       </nav>
     </div>
   </header>
@@ -90,5 +120,3 @@ if (file_exists($logoFilePath)) {
     });
   </script>
 
-
-  <main class="container">

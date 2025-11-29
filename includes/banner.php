@@ -1,4 +1,3 @@
-</main>
 <?php
   $bannerCfg = [];
   $cfgPath = __DIR__ . '/site-config.json';
@@ -103,5 +102,3 @@ var swiper = new Swiper('.section_slider', {
     spaceBetween: 0,
 });
 </script>
-
-<main class="container">

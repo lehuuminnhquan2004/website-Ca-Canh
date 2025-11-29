@@ -11,6 +11,8 @@ $configPath = __DIR__ . '/../includes/site-config.json';
 $config = [
     'phone' => '0328421191',
     'zalo' => '0328421191',
+    'email'=>'',
+    'address'=>'',
     'messenger' => 'https://m.me/yourpage',
     'facebook' => 'https://facebook.com/yourpage',
     'tiktok' => '',
@@ -46,6 +48,8 @@ $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $config['phone'] = trim($_POST['phone'] ?? '');
+    $config['email'] = trim($_POST['email'] ?? '');
+    $config['address'] = trim($_POST['address'] ?? '');
     $config['zalo'] = trim($_POST['zalo'] ?? '');
     $config['messenger'] = trim($_POST['messenger'] ?? '');
     $config['facebook'] = trim($_POST['facebook'] ?? '');
@@ -135,6 +139,12 @@ include __DIR__ . '/admin-header.php';
 
         <label for="phone">Số điện thoại (dùng cho nút gọi):</label>
         <input type="text" id="phone" name="phone" value="<?= htmlspecialchars($config['phone']) ?>" >
+        <label for="email">Email</label>
+        <input type="text" id="email" name="email" value="<?= htmlspecialchars($config['email']) ?>" >
+
+        <label for="address">Địa chỉ cửa hàng:</label>
+        <input type="text" id="address" name="address" value="<?= htmlspecialchars($config['address']) ?>" >
+
 
         <label for="zalo">Zalo (điền số hoặc link zalo.me):</label>
         <input type="text" id="zalo" name="zalo" value="<?= htmlspecialchars($config['zalo']) ?>" >

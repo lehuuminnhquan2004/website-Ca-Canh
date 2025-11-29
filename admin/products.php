@@ -15,14 +15,18 @@ if (isset($_GET['delete'])) {
     $result = mysqli_query($conn, "SELECT thumbnail FROM products WHERE id = $id");
     $row = mysqli_fetch_assoc($result);
 
-    if ($row && !empty($row['thumbnail'])) {
-        $thumb = $row['thumbnail'];
-        // Nếu đã lưu kèm đường dẫn, giữ nguyên; nếu chỉ là tên file, thêm thư mục uploads
-        if (!str_contains($thumb, "uploads/") && !str_starts_with($thumb, "../images/")) {
-            $thumb = "../images/uploads/" . ltrim($thumb, '/');
-        }
-        if (file_exists($thumb)) unlink($thumb);
+if ($row && !empty($row['thumbnail'])) {
+    $thumb = $row['thumbnail'];
+    // Chuẩn hóa đường dẫn về thư mục images/uploads ngoài thư mục admin
+    if (str_starts_with($thumb, './')) {
+        $thumb = '../' . ltrim($thumb, './');
+    } elseif (!str_contains($thumb, 'uploads/') && !str_starts_with($thumb, '../images/')) {
+        $thumb = '../images/uploads/' . ltrim($thumb, '/');
     }
+    if (file_exists($thumb)) {
+        unlink($thumb);
+    }
+}
 
     mysqli_query($conn, "DELETE FROM products WHERE id = $id");
     header("Location: ./products.php");

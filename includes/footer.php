@@ -14,14 +14,13 @@
   }
 ?>
 <?php include __DIR__ . '/nutlienhe.php'; ?>
-</main class="container">
 <footer class="footer">
   <div class="footer-container">
 
     
     <div class="thongtin">
       <div class="footer-col">
-        <h3>Cửa hàng cá cảnh</h3>
+        <h3>Cá cảnh Q8 Aquarium Coffee</h3>
         <p>Chuyên cung cấp cá cảnh, hồ cá, phụ kiện và tư vấn chăm sóc cá.</p>
         <p>© <?= date('Y') ?> Cửa hàng cá cảnh</p>
       </div>
@@ -29,9 +28,9 @@
       <div class="footer-col">
         <h4>Liên hệ</h4>
         <ul>
-          <li>📍 665 Phạm Thế Hiển - Phường 4 - Quận 8 - HCM</li>
-          <li>📞 032x xxx xxx</li>
-          <li>📧 cacuahang@example.com</li>
+          <li>📍 <?= htmlspecialchars($cfg['address'] ?: '') ?></li>
+          <li>📞 <?= htmlspecialchars($cfg['phone'] ?: '') ?></li>
+          <li>📧 <?= htmlspecialchars($cfg['email'] ?: '') ?></li>
           <li>🕒 8:00 - 22:00 (hàng ngày)</li>
         </ul>
       </div>
